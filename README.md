@@ -1,5 +1,9 @@
 # MSiA423 Template Repository
 
+Developer: Siqi Li
+
+QA: Luping Zhao
+
 <!-- toc -->
 
 - [Directory structure](#directory-structure)
