@@ -1,5 +1,7 @@
 # MSiA423 Template Repository
 
+<!-- toc -->
+
 ### Developer: Siqi Li
 
 ### QA: Luping Zhao
