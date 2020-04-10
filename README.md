@@ -6,6 +6,28 @@
 
 ### QA: Luping Zhao
 
+## Project Charter 
+
+**Vision**:
+
+**Mission**:
+
+**Data source**:
+
+**Success criteria**:
+
+## Backlog
+
+**Initiatives**:
+
+**Epics**:
+
+**Icebox**:
+
+<!-- toc -->
+
+## Repo structure
+
 <!-- toc -->
 
 - [Directory structure](#directory-structure)
