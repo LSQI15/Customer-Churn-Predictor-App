@@ -32,7 +32,6 @@ Deploy a machine learning model to help business stakeholders identify customers
 
 **Initiative 1: Data Manipulation & Exploratory Data Analysis**
 
-***Epics and Stories***:
 1.	Data overview and descriptive summary statistics
 2.	Explore each individual variable
     *	check the distribution and examine outliers, missing values, etc
@@ -45,7 +44,6 @@ Deploy a machine learning model to help business stakeholders identify customers
 
 **Initiative 2: Model Development**
 
-***Epics and Stories***:
 1.	Model building 
     *	Split data into the training set and the test set
     *	Build a logistic regression model as the baseline model
@@ -58,7 +56,6 @@ Deploy a machine learning model to help business stakeholders identify customers
 
 **Initiative 3: Product Development**
 
-***Epics and Stories***:
 1.	Product building
     *	Construct data pipeline
         *	Use a S3 bucket to store the raw source data
