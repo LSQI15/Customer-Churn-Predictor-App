@@ -26,11 +26,22 @@ This project enables business stakeholders to predict whether a given customer w
 
 ## Backlog
 
-**Initiatives**:
+**Main Goal**:
 
 Deploy a machine learning model to help business stakeholders identify customers who are likely to churn. By applying this model, business stakeholders can take remedial actions for customer retention in advance and ultimately decrease the customer attrition rate.
 
+**Initiative1**
+
 **Epics**:
+
+**Initiative2**
+
+**Epics**:
+
+**Initiative3**
+
+**Epics**:
+
 
 **Icebox**:
 
