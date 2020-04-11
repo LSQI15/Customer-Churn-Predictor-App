@@ -1,4 +1,4 @@
-# MSiA423 Template Repository
+# MSiA423 Customer Churn Prediction - Project Repository
 
 <!-- toc -->
 
