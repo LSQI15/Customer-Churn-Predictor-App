@@ -26,24 +26,56 @@ This project enables business stakeholders to predict whether a given customer w
 
 ## Backlog
 
-**Main Goal**:
+**Main Initiative **:
 
 Deploy a machine learning model to help business stakeholders identify customers who are likely to churn. By applying this model, business stakeholders can take remedial actions for customer retention in advance and ultimately decrease the customer attrition rate.
 
-**Initiative1**
+**Initiative 1: Data Manipulation & Exploratory Data Analysis**
 
-**Epics**:
+**Epics and Stories**:
+1.	Data overview and descriptive summary statistics
+2.	Explore each individual variable
+    *	check the distribution and examine outliers, missing values, etc
+    *	clean the data and generate new features if necessary
+3.	Assess the relationship between each predictor and the response variable
+    *	visualize through a matrix of scatterplots
+4.	Assess the interaction among variables 
+    *	visualize the correlation matrix
+5.	Based on EDA, derive useful insights into customer churn, if any
 
-**Initiative2**
+**Initiative 2: Model Development**
 
-**Epics**:
+**Epics and Stories**:
+1.	Model building 
+    *	Split data into the training set and the test set
+    *	Build a logistic regression model as the baseline model
+    *	Train a random forest model with grid search to figure out the optimal parameter combination
+    *	Train an XGBoost model with grid search to figure out the optimal parameter combination
+    *	Export variable importance and derive useful insights if any
+2.	Model evaluation
+    *	Apply 10-fold cross-validation to evaluate the model performance based on metrics such as correct classification rate and F-1 score.
+    *	Pick the best model based on performance metrics
 
-**Initiative3**
+**Initiative 3: Product Development**
 
-**Epics**:
-
+**Epics and Stories**:
+1.	Product building
+    *	Construct data pipeline
+        *	Use a S3 bucket to store the raw source data
+    *	Web app (Flask) Development
+        *	Design and build user interface
+        *	Achieve all desired functionalities
+2.	Product testing and refinement
+    *	Conduct unit test to evaluate each functionality and fix bugs
+    *	Enhance functionality and refine user interface if time allows
+3.	Final roll-out
 
 **Icebox**:
+1.	Upload raw data to a S3 bucket
+2.	Deploy model with Flask
+3.	Design interactive user interface
+*	Basically, need to learn more about RD3, S3, Docker and Flask (what they are, how they work together, and how to use them) in order to success complete the project and achieve the desired outcome; but as the quarter progresses, these road blocker will be tackled one by one.
+
 
 <!-- toc -->
 
