@@ -20,7 +20,7 @@ This project enables business stakeholders to predict whether a given customer w
 
 **Success criteria**:
 
-- Model performance metric: 80 % cross-validated correct classification accuracy on the training data 
+- Model performance metric: 80% cross-validated correct classification accuracy on the training data 
 - Business outcome metrics: 10% decrease in customer attrition rate resulted from the deployment of the project 
 
 
