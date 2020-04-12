@@ -16,7 +16,7 @@ Customer attrition refers to the loss of customers by a business. No matter whet
 
 This project uses the *Telco customer churn data* compiled by BlastChar on Kaggle.com (https://www.kaggle.com/blastchar/telco-customer-churn). This data set contains information about a telecom company which provides services to 7,043 customers in California. For each customer, it has the binary indicator of whether a customer has churned, along with several demographic predictors such as gender and service predictors such as the monthly payment. The dimension of the dataset is 7,043 rows by 21 columns.
 
-This project enables business stakeholders to predict whether a given customer will churn and get the associated predicted probability of churn by entering parameters such as that customer’s gender, contract term, and monthly charge. Based on the predicted results, business stakeholders can then implement plans to retain customers who are likely to churn. The prediction is based on a supervised machine learning model trained and validated on historical customer attrition data.
+This project enables business stakeholders at the telecom company to predict whether a given customer will churn and get the associated predicted probability of churn by entering parameters such as the customer’s gender, contract term, and monthly charge. Based on the predicted results, business stakeholders can then implement plans to retain customers who are likely to churn. The prediction is based on a supervised machine learning model trained and validated on historical customer attrition data.
 
 **Success criteria**:
 
