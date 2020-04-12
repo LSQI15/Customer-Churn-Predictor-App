@@ -63,7 +63,7 @@ Deploy a machine learning model to help business stakeholders identify customers
         *	Design and build user interface
         *	Achieve all desired functionalities
 2.	Product testing and refinement
-    *	Conduct unit test to evaluate each functionality and fix bugs (8 points - needs to be broken down more when it comes to execution)
+    *	Conduct unit tests to evaluate each functionality and fix bugs (8 points - needs to be broken down more when it comes to execution)
     *	Enhance functionality and refine user interface if time allows (4 points)
 3.	Final roll-out (2 points)
 
