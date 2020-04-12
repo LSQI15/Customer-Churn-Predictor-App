@@ -57,15 +57,15 @@ Deploy a machine learning model to help business stakeholders identify customers
 **Initiative 3: Product Development**
 
 1.	Product building
-    *	Construct data pipeline
+    *	Construct data pipeline (2 points)
         *	Use a S3 bucket to store the raw source data
-    *	Web app (Flask) Development
+    *	Web app (Flask) Development (8 points - needs to be broken down more when it comes to execution)
         *	Design and build user interface
         *	Achieve all desired functionalities
 2.	Product testing and refinement
-    *	Conduct unit test to evaluate each functionality and fix bugs
-    *	Enhance functionality and refine user interface if time allows
-3.	Final roll-out
+    *	Conduct unit test to evaluate each functionality and fix bugs (8 points - needs to be broken down more when it comes to execution)
+    *	Enhance functionality and refine user interface if time allows (4 points)
+3.	Final roll-out (2 points)
 
 **Icebox**:
 1.	Upload raw data to a S3 bucket
