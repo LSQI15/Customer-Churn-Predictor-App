@@ -47,8 +47,8 @@ Deploy a machine learning model to help business stakeholders identify customers
 1.	Model building 
     *	Split data into the training set and the test set (0 points)
     *	Build a logistic regression model as the baseline model (1 point)
-    *	Train a random forest model with grid search to figure out the optimal parameter combination (4 points)
-    *	Train an XGBoost model with grid search to figure out the optimal parameter combination (4 points)
+    *	Train random forest models with grid search to figure out the optimal parameter combination (4 points)
+    *	Train XGBoost models with grid search to figure out the optimal parameter combination (4 points)
     *	Export variable importance and derive useful insights if any (2 points)
 2.	Model evaluation
     *	Apply 10-fold cross-validation to evaluate the model performance (random forest vs. XGBoost) based on metrics such as correct classification rate and F-1 score. (2 points)
