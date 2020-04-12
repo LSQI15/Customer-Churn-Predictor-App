@@ -51,7 +51,7 @@ Deploy a machine learning model to help business stakeholders identify customers
     *	Train an XGBoost model with grid search to figure out the optimal parameter combination (4 points)
     *	Export variable importance and derive useful insights if any (2 points)
 2.	Model evaluation
-    *	Apply 10-fold cross-validation to evaluate the model performance based on metrics such as correct classification rate and F-1 score. (2 points)
+    *	Apply 10-fold cross-validation to evaluate the model performance (random forest vs. XGBoost) based on metrics such as correct classification rate and F-1 score. (2 points)
     *	Pick the best model based on performance metrics (0 points)
 
 **Initiative 3: Product Development**
