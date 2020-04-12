@@ -32,27 +32,27 @@ Deploy a machine learning model to help business stakeholders identify customers
 
 **Initiative 1: Data Manipulation & Exploratory Data Analysis**
 
-1.	Data overview and descriptive summary statistics
-2.	Explore each individual variable
+1.	Data overview and descriptive summary statistics (1 point)
+2.	Explore each individual variable (4 points)
     *	check the distribution and examine outliers, missing values, etc
     *	clean the data and generate new features if necessary
-3.	Assess the relationship between each predictor and the response variable
+3.	Assess the relationship between each predictor and the response variable (1 point)
     *	visualize through a matrix of scatterplots
-4.	Assess the interaction among variables 
+4.	Assess the interaction among variables (1 point)
     *	visualize the correlation matrix
-5.	Based on EDA, derive useful insights into customer churn, if any
+5.	Based on EDA, derive useful insights into customer churn, if any (1 point)
 
 **Initiative 2: Model Development**
 
 1.	Model building 
-    *	Split data into the training set and the test set
-    *	Build a logistic regression model as the baseline model
-    *	Train a random forest model with grid search to figure out the optimal parameter combination
-    *	Train an XGBoost model with grid search to figure out the optimal parameter combination
-    *	Export variable importance and derive useful insights if any
+    *	Split data into the training set and the test set (0 points)
+    *	Build a logistic regression model as the baseline model (1 point)
+    *	Train a random forest model with grid search to figure out the optimal parameter combination (4 points)
+    *	Train an XGBoost model with grid search to figure out the optimal parameter combination (4 points)
+    *	Export variable importance and derive useful insights if any (2 points)
 2.	Model evaluation
-    *	Apply 10-fold cross-validation to evaluate the model performance based on metrics such as correct classification rate and F-1 score.
-    *	Pick the best model based on performance metrics
+    *	Apply 10-fold cross-validation to evaluate the model performance based on metrics such as correct classification rate and F-1 score. (2 points)
+    *	Pick the best model based on performance metrics (0 points)
 
 **Initiative 3: Product Development**
 
