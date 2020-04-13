@@ -21,7 +21,7 @@ This project enables business stakeholders at the telecom company to predict whe
 **Success criteria**:
 
 - Model performance metric: 80% cross-validated correct classification accuracy on the training data 
-- Business outcome metrics: 10% decrease in customer attrition rate resulted from the deployment of the project 
+- Business outcome metrics: 10% decrease in customer attrition rate in the month following the deployment of the project 
 
 
 ## Backlog
