@@ -12,6 +12,7 @@
 
 Customer attrition refers to the loss of customers by a business. No matter whether a customer is a one-time purchaser or a loyal program member, customers will eventually churn and not remain active indefinitely. The loss of customers is undesirable, as in most of the cases, the cost to retain a customer is lower than that to acquire a new customer. Companies in various industries such as telecom companies, insurance companies and restaurants often analyze customer attrition to get a deeper insight into the churn. This project specifically aims to help a telecom company make reliable predictions for customer churn so that the company can implement remedial actions for customer retention.
 
+
 **Mission**:
 
 This project uses the *Telco customer churn data* compiled by BlastChar on Kaggle.com (https://www.kaggle.com/blastchar/telco-customer-churn). This data set contains information about a telecom company which provides services to 7,043 customers in California. For each customer, it has the binary indicator of whether a customer has churned, along with several demographic predictors such as gender and service predictors such as the monthly payment. The dimension of the dataset is 7,043 rows by 21 columns.
