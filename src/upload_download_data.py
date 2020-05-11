@@ -15,8 +15,8 @@ def upload_data(args):
     """
     s3 = boto3.client('s3')
     try:
-        filepath = args.localfolder + '//' + args.filename
-        s3.upload_file(filepath, args.bucket, 'data/%s' % args.filename)
+        path = args.localfolder + '//' + args.filename
+        s3.upload_file(path, args.bucket, 'data/%s' % args.filename)
         logger.info("%s is successfully uploaded to bucket %s" % (args.filename, args.bucket))
     except boto3.exceptions.S3UploadFailedError:
         logger.error("Error: upload unsuccessful.")
@@ -30,5 +30,11 @@ def download_data(file_name, source_url, local_file_path):
     :param local_file_path (String): path to the saved file
     :return: None
     """
-
+    path = local_file_path + '//' + file_name
+    try:
+        r = requests.get(source_url)
+        open(path, 'wb').write(r.content)
+        logger.info("%s is downloaded from S3 bucket %s to %s " % (file_name, source_url, local_file_path))
+    except requests.exceptions.RequestException:
+        logger.error("Error: Unable to download %s from S3 bucket %s" % (file_name, source_url))
 
