@@ -1,5 +1,6 @@
 export MYSQL_USER="YOUR_USERNAME"
 export MYSQL_PASSWORD="YOUR_PASSWORD"
-export MYSQL_HOST="localhost"
+export MYSQL_HOST="msia423-siqi-li-project.ct7mjfzo5pv8.us-east-1.rds.amazonaws.com"
 export MYSQL_PORT="3306"
+MYSQL_DATABASE_NAME="customer"
 
