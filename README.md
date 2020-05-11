@@ -6,74 +6,6 @@
 
 ### QA: Luping Zhao
 
-## Project Charter 
-
-**Vision**:
-
-Customer attrition refers to the loss of customers by a business. No matter whether a customer is a one-time purchaser or a loyal program member, customers will eventually churn and not remain active indefinitely. The loss of customers is undesirable, as in most of the cases, the cost to retain a customer is lower than that to acquire a new customer. Companies in various industries such as telecom companies, insurance companies and restaurants often analyze customer attrition to get a deeper insight into the churn. This project specifically aims to help a telecom company make reliable predictions for customer churn so that the company can implement remedial actions for customer retention.
-
-
-**Mission**:
-
-This project uses the *Telco customer churn data* compiled by BlastChar on Kaggle.com (https://www.kaggle.com/blastchar/telco-customer-churn). This data set contains information about a telecom company which provides services to 7,043 customers in California. For each customer, it has the binary indicator of whether a customer has churned, along with several demographic predictors such as gender and service predictors such as the monthly payment. The dimension of the dataset is 7,043 rows by 21 columns.
-
-This project enables business stakeholders at the telecom company to predict whether a given customer will churn and get the associated predicted probability of churn by entering parameters such as the customer’s gender, contract term, and monthly charge. Based on the predicted results, business stakeholders can then implement plans to retain customers who are likely to churn. The prediction is based on a supervised machine learning model trained and validated on historical customer attrition data.
-
-**Success criteria**:
-
-- Model performance metric: 80% cross-validated correct classification accuracy on the training data 
-- Business outcome metrics: 10% decrease in customer attrition rate in the month following the deployment of the project 
-
-
-## Backlog
-
-**Main Initiative**:
-
-Deploy a machine learning model to help business stakeholders identify customers who are likely to churn. By applying this model, business stakeholders can take remedial actions for customer retention in advance and ultimately decrease the customer attrition rate.
-
-**Initiative 1: Data Manipulation & Exploratory Data Analysis**
-
-1.	Data overview and descriptive summary statistics (1 point)
-2.	Explore each individual variable (4 points)
-    *	check the distribution and examine outliers, missing values, etc
-    *	clean the data and generate new features if necessary
-3.	Assess the relationship between each predictor and the response variable (1 point)
-    *	visualize through a matrix of scatterplots
-4.	Assess the interaction among variables (1 point)
-    *	visualize the correlation matrix
-5.	Based on EDA, derive useful insights into customer churn, if any (1 point)
-
-**Initiative 2: Model Development**
-
-1.	Model building 
-    *	Split data into the training set and the test set (0 points)
-    *	Build a logistic regression model as the baseline model (1 point)
-    *	Train random forest models with grid search to figure out the optimal parameter combination (4 points)
-    *	Train XGBoost models with grid search to figure out the optimal parameter combination (4 points)
-    *	Export variable importance and derive useful insights if any (2 points)
-2.	Model evaluation
-    *	Apply 10-fold cross-validation to evaluate the model performance (random forest vs. XGBoost) based on metrics such as correct classification rate and F-1 score. (2 points)
-    *	Pick the best model based on performance metrics (0 points)
-
-**Initiative 3: Product Development**
-
-1.	Product building
-    *	Construct data pipeline (2 points)
-        *	Use a S3 bucket to store the raw source data
-    *	Web app (Flask) Development (8 points - needs to be broken down more when it comes to execution)
-        *	Design and build user interface
-        *	Achieve all desired functionalities
-2.	Product testing and refinement
-    *	Conduct unit tests to evaluate each functionality and fix bugs (8 points - needs to be broken down more when it comes to execution)
-    *	Enhance functionality and refine user interface if time allows (4 points)
-3.	Final roll-out (2 points)
-
-**Icebox**:
-1.	Upload raw data to a S3 bucket
-2.	Deploy model with Flask
-3.	Design interactive user interface
-*	Basically, need to learn more about RD3, S3, Docker and Flask (what they are, how they work together, and how to use them) in order to success complete the project and achieve the desired outcome; but as the quarter progresses, these road blocker will be tackled one by one.
-
 
 <!-- toc -->
 
@@ -94,6 +26,7 @@ Deploy a machine learning model to help business stakeholders identify customers
   * [1. Build the image](#1-build-the-image)
   * [2. Run the container](#2-run-the-container)
   * [3. Kill the container](#3-kill-the-container)
+- [Project Charter](#project-charter)
 
 <!-- tocstop -->
 
@@ -241,3 +174,75 @@ docker kill test
 ```
 
 where `test` is the name given in the `docker run` command.
+
+
+## Project Charter 
+
+**Vision**:
+
+Customer attrition refers to the loss of customers by a business. No matter whether a customer is a one-time purchaser or a loyal program member, customers will eventually churn and not remain active indefinitely. The loss of customers is undesirable, as in most of the cases, the cost to retain a customer is lower than that to acquire a new customer. Companies in various industries such as telecom companies, insurance companies and restaurants often analyze customer attrition to get a deeper insight into the churn. This project specifically aims to help a telecom company make reliable predictions for customer churn so that the company can implement remedial actions for customer retention.
+
+
+**Mission**:
+
+This project uses the *Telco customer churn data* compiled by BlastChar on Kaggle.com (https://www.kaggle.com/blastchar/telco-customer-churn). This data set contains information about a telecom company which provides services to 7,043 customers in California. For each customer, it has the binary indicator of whether a customer has churned, along with several demographic predictors such as gender and service predictors such as the monthly payment. The dimension of the dataset is 7,043 rows by 21 columns.
+
+This project enables business stakeholders at the telecom company to predict whether a given customer will churn and get the associated predicted probability of churn by entering parameters such as the customer’s gender, contract term, and monthly charge. Based on the predicted results, business stakeholders can then implement plans to retain customers who are likely to churn. The prediction is based on a supervised machine learning model trained and validated on historical customer attrition data.
+
+**Success criteria**:
+
+- Model performance metric: 80% cross-validated correct classification accuracy on the training data 
+- Business outcome metrics: 10% decrease in customer attrition rate in the month following the deployment of the project 
+
+
+## Backlog
+
+**Main Initiative**:
+
+Deploy a machine learning model to help business stakeholders identify customers who are likely to churn. By applying this model, business stakeholders can take remedial actions for customer retention in advance and ultimately decrease the customer attrition rate.
+
+**Initiative 1: Data Manipulation & Exploratory Data Analysis**
+
+1.	Data overview and descriptive summary statistics (1 point)
+2.	Explore each individual variable (4 points)
+    *	check the distribution and examine outliers, missing values, etc
+    *	clean the data and generate new features if necessary
+3.	Assess the relationship between each predictor and the response variable (1 point)
+    *	visualize through a matrix of scatterplots
+4.	Assess the interaction among variables (1 point)
+    *	visualize the correlation matrix
+5.	Based on EDA, derive useful insights into customer churn, if any (1 point)
+
+**Initiative 2: Model Development**
+
+1.	Model building 
+    *	Split data into the training set and the test set (0 points)
+    *	Build a logistic regression model as the baseline model (1 point)
+    *	Train random forest models with grid search to figure out the optimal parameter combination (4 points)
+    *	Train XGBoost models with grid search to figure out the optimal parameter combination (4 points)
+    *	Export variable importance and derive useful insights if any (2 points)
+2.	Model evaluation
+    *	Apply 10-fold cross-validation to evaluate the model performance (random forest vs. XGBoost) based on metrics such as correct classification rate and F-1 score. (2 points)
+    *	Pick the best model based on performance metrics (0 points)
+
+**Initiative 3: Product Development**
+
+1.	Product building
+    *	Construct data pipeline (2 points)
+        *	Use a S3 bucket to store the raw source data
+    *	Web app (Flask) Development (8 points - needs to be broken down more when it comes to execution)
+        *	Design and build user interface
+        *	Achieve all desired functionalities
+2.	Product testing and refinement
+    *	Conduct unit tests to evaluate each functionality and fix bugs (8 points - needs to be broken down more when it comes to execution)
+    *	Enhance functionality and refine user interface if time allows (4 points)
+3.	Final roll-out (2 points)
+
+**Icebox**:
+1.	Upload raw data to a S3 bucket
+2.	Deploy model with Flask
+3.	Design interactive user interface
+*	Basically, need to learn more about RD3, S3, Docker and Flask (what they are, how they work together, and how to use them) in order to success complete the project and achieve the desired outcome; but as the quarter progresses, these road blocker will be tackled one by one.
+
+
+
