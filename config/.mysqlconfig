@@ -2,3 +2,4 @@ export MYSQL_USER="YOUR_USERNAME"
 export MYSQL_PASSWORD="YOUR_PASSWORD"
 export MYSQL_HOST="localhost"
 export MYSQL_PORT="3306"
+
