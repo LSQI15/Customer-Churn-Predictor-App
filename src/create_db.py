@@ -1,17 +1,14 @@
 import os
-import sys
 import logging
-import logging.config
-
-from sqlalchemy import create_engine, Column, Integer, String, Text
-from sqlalchemy.orm import sessionmaker
 import sqlalchemy as sql
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-
+from sqlalchemy import create_engine, Column, Integer, String, Text, Float, MetaData
+import logging.config
 import config
-import logging
-logger = logging.getLogger(__name__)
+import sys
 
+logger = logging.getLogger(__name__)
 Base = declarative_base()
 
 class Customer(Base):
@@ -44,3 +41,5 @@ class Customer(Base):
     def __repr__(self):
         return "<Customer(id='%d', monthly_charges='%d', total_charges='%d')>" \
                % (self.id, self.MonthlyCharges, self.TotalCharges)
+
+
