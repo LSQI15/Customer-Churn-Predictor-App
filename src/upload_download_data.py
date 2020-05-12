@@ -11,30 +11,34 @@ def upload_data(args):
     """
     Upload data in the local folder to a S3 bucket of user's choice
     :param args: The name of S3 bucket which data will be uploaded to
+        local_file_path: path to the saved file
+        file_name: the name of the file
+        bucket_url: link to the S3 bucket
     :return: None
     """
     s3 = boto3.client('s3')
     try:
-        path = args.localfolder + '/' + args.filename
-        s3.upload_file(path, args.bucket, 'data/%s' % args.filename)
-        logger.info("%s is successfully uploaded to bucket %s" % (args.filename, args.bucket))
+        path = args.local_file_path + '/' + args.file_name
+        s3.upload_file(path, args.bucket_url, 'data/%s' % args.file_name)
+        logger.info("%s is successfully uploaded to bucket %s" % (args.file_name, args.bucket_url))
     except boto3.exceptions.S3UploadFailedError:
         logger.error("Error: upload unsuccessful.")
 
 
-def download_data(file_name, source_url, local_file_path):
+def download_data(args):
     """
     Download data from a public S3 bucket to the local folder based on user input
-    :param file_name (String): name of the file
-    :param source_url (String): link to the S3 bucket
-    :param local_file_path (String): path to the saved file
+    :param args
+        .file_name (String): name of the file
+        .source_url (String): link to the file in S3 bucket
+        .local_file_path (String): path to the saved file
     :return: None
     """
-    path = local_file_path + '//' + file_name
+    path = args.local_file_path + '/' + args.file_name
     try:
-        r = requests.get(source_url)
+        r = requests.get(args.source_url)
         open(path, 'wb').write(r.content)
-        logger.info("%s is downloaded from S3 bucket %s to %s " % (file_name, source_url, local_file_path))
+        logger.info("%s is downloaded from S3 bucket %s to %s " % (args.file_name, args.source_url, args.local_file_path))
     except requests.exceptions.RequestException:
-        logger.error("Error: Unable to download %s from S3 bucket %s" % (file_name, source_url))
+        logger.error("Error: Unable to download %s from S3 bucket %s" % (args.file_name, args.source_url))
 
