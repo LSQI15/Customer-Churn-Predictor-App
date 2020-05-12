@@ -7,7 +7,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Text, Float, Meta
 import logging.config
 import config
 import sys
-#import config.flask_config as conf
+import config.flask_config as conf
 
 logger = logging.getLogger(__name__)
 Base = declarative_base()
