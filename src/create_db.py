@@ -7,6 +7,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Text, Float, Meta
 import logging.config
 import config
 import sys
+#import config.flask_config as conf
 
 logger = logging.getLogger(__name__)
 Base = declarative_base()
@@ -43,3 +44,18 @@ class Customer(Base):
                % (self.id, self.MonthlyCharges, self.TotalCharges)
 
 
+def create_db(args):
+    """
+        Create the database locally or in RDS based on user input
+        :param args: True/False indicating whether to create the database in RDS
+        :return: None
+    """
+    if args.rds == "True":      # set up the database in RDS
+        engine_string = conf.RDS_ENGINE_STRING
+    elif args.rds == "False":   # set up the database locally
+        engine_string = conf.LOCAL_ENGINE_STRING
+    else:
+        raise logger.error("Invalid args.rds option %s: " % args.rds)
+    # create engine and database
+    engine = sql.create_engine(engine_string, echo = True)
+    Base.metadata.create_all(engine)
