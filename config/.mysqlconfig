@@ -1,5 +1,5 @@
-export MYSQL_USER="YOUR_USERNAME"
-export MYSQL_PASSWORD="YOUR_PASSWORD"
+export MYSQL_USER="admin"
+export MYSQL_PASSWORD="MSiA-423-Siqi"
 export MYSQL_HOST="msia423-siqi-li-project.ct7mjfzo5pv8.us-east-1.rds.amazonaws.com"
 export MYSQL_PORT="3306"
-export DATABASE_NAME="customer"
+export DATABASE_NAME="msia423_project_db"
