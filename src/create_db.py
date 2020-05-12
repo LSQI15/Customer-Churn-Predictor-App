@@ -1,13 +1,12 @@
 import os
 import logging
 import sqlalchemy as sql
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine, Column, Integer, String, Text, Float, MetaData
 import logging.config
 import config
 import sys
-import config.flask_config as conf
+import config.flaskconfig as conf
 
 logger = logging.getLogger(__name__)
 Base = declarative_base()
@@ -52,6 +51,7 @@ def create_db(args):
     """
     if args.rds == "True":      # set up the database in RDS
         engine_string = conf.RDS_ENGINE_STRING
+        print(engine_string)
     elif args.rds == "False":   # set up the database locally
         engine_string = conf.LOCAL_ENGINE_STRING
     else:
