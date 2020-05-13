@@ -92,8 +92,10 @@ the port number. Otherwise, it will use the default Configurations:
 * LOCAL_ENGINE_STRING = 'sqlite:///data/customer.db'
 
 After updating the cofigurations, run: 
+    
      ```
     docker run --mount type=bind,source="$(pwd)"/data,target=/app/data customer_churn run.py create_db --rds=False
+    
     ```
 By default, this will set up a table `customer` in the SQLite database instance `customer.db`.
 
@@ -101,16 +103,17 @@ By default, this will set up a table `customer` in the SQLite database instance 
 
 To create the database in Amazon AWS RDS, please first update the following credentials 
 in the `config/.mysqlconfig` file.
+
  * AWS_ACCESS_KEY_ID
  * AWS_SECRET_ACCESS_KEY
  * MYSQL_USER 
  * MYSQL_PASSWORD
 
 The default database configurations are:
-MYSQL_HOST=msia423-siqi-li-project.ct7mjfzo5pv8.us-east-1.rds.amazonaws.com
-MYSQL_PORT=3306
-DATABASE_NAME=msia423_project_db
-REGION=us-east-1
+* MYSQL_HOST=msia423-siqi-li-project.ct7mjfzo5pv8.us-east-1.rds.amazonaws.com
+* MYSQL_PORT=3306
+* DATABASE_NAME=msia423_project_db
+* REGION=us-east-1
 
 After finishing updating the `config/.mysqlconfig`, run:
 
