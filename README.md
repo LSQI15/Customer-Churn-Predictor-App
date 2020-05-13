@@ -4,7 +4,7 @@
 
 ### Developer: Siqi Li
 
-### QA: Luping Zhao
+### QA: Luping(Rachel) Zhao
 
 
 <!-- toc -->
@@ -75,6 +75,37 @@
 ```
 
 ## Running the app
+
+### 1. Set up configurations
+
+(a) Local SQLite Database Configurations
+
+Please edit the 'config/flaskconfig.py' file if you want to make change to the engine string, the host or 
+the port number. Otherwise, it will use the default Configurations:
+* PORT = 5000
+* HOST = "0.0.0.0"
+* LOCAL_ENGINE_STRING = 'sqlite:///data/customer.db'
+
+(b) Amazon AWS RDS Configurations
+
+Please first edit the 'config/.mysqlconfig' file to set up your MYSQL_USER and MYSQL_PASSWORD for the RDS instance. 
+Then add environment variables to your bashrc file by running 
+
+    ```
+    echo 'source config/.mysqlconfig' >> ~/.bashrc
+    source ~/.bashrc
+    ```
+Also please update 'config/.mysqlconfig' file, if you want to the make change to the RDS host/port/database. Otherwise, 
+it will use the default RDS instance with 
+* MYSQL_HOST="msia423-siqi-li-project.ct7mjfzo5pv8.us-east-1.rds.amazonaws.com"
+* MYSQL_PORT="3306"
+* DATABASE_NAME="msia423_project_db"
+    
+### 1. Build the Docker image for executing the pipeline
+    ```
+    docker build -f app/Dockerfile -t customer_churn .
+    ```
+
 ### 1. Initialize the database 
 
 #### Create the database with a single song 
