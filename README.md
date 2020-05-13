@@ -76,37 +76,50 @@
 
 ## Running the app
 
-### 1. Set up configurations
+### 1. Build the Docker image for executing the pipeline
+    ```
+    docker build -f app/Dockerfile -t customer_churn .
+    ```
+    
+### 2. Initialize the database 
 
-(a) Local SQLite Database Configurations
+#### (a) Set up SQLite database locally
 
-Please edit the 'config/flaskconfig.py' file if you want to make change to the engine string, the host or 
+To create the database locally using SQLite, please edit the 'config/flaskconfig.py' file if you want to make change to the engine string, the host or 
 the port number. Otherwise, it will use the default Configurations:
 * PORT = 5000
 * HOST = "0.0.0.0"
 * LOCAL_ENGINE_STRING = 'sqlite:///data/customer.db'
 
-(b) Amazon AWS RDS Configurations
+After updating the cofigurations, run: 
+     ```
+    docker run --mount type=bind,source="$(pwd)"/data,target=/app/data customer_churn run.py create_db --rds=False
+    ```
+By default, this will set up a table `customer` in the SQLite database instance `customer.db`.
 
-Please first edit the 'config/.mysqlconfig' file to set up your MYSQL_USER and MYSQL_PASSWORD for the RDS instance. 
-Then add environment variables to your bashrc file by running 
+#### (b) Set up Amazon AWS RDS 
+
+To create the database in Amazon AWS RDS, please first update the following credentials 
+in the `config/.mysqlconfig` file.
+ * AWS_ACCESS_KEY_ID
+ * AWS_SECRET_ACCESS_KEY
+ * MYSQL_USER 
+ * MYSQL_PASSWORD
+
+The default database configurations are:
+MYSQL_HOST=msia423-siqi-li-project.ct7mjfzo5pv8.us-east-1.rds.amazonaws.com
+MYSQL_PORT=3306
+DATABASE_NAME=msia423_project_db
+REGION=us-east-1
+
+After finishing updating the `config/.mysqlconfig`, run:
 
     ```
-    echo 'source config/.mysqlconfig' >> ~/.bashrc
-    source ~/.bashrc
+    docker run --env-file=config/.mysqlconfig customer_churn run.py create_db --rds=True
     ```
-Also please update 'config/.mysqlconfig' file, if you want to the make change to the RDS host/port/database. Otherwise, 
-it will use the default RDS instance with 
-* MYSQL_HOST="msia423-siqi-li-project.ct7mjfzo5pv8.us-east-1.rds.amazonaws.com"
-* MYSQL_PORT="3306"
-* DATABASE_NAME="msia423_project_db"
     
-### 1. Build the Docker image for executing the pipeline
-    ```
-    docker build -f app/Dockerfile -t customer_churn .
-    ```
+By default, this will create a table named `customer` within the `msia423_project_db` database in RDS.
 
-### 1. Initialize the database 
 
 #### Create the database with a single song 
 To create the database in the location configured in `config.py` with one initial song, run: 
