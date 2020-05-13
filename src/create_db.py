@@ -24,16 +24,16 @@ class Customer(Base):
     Tenure = Column(Integer, unique=False, nullable=False)              # integer
     PhoneService = Column(Integer, unique=False, nullable=False)        # binary (0/1)
     MultipleLines = Column(Integer, unique=False, nullable=False)       # categorical with 3 classes (0/1/2)
-    InternetService = Column(String(100), unique=True, nullable=False)  # categorical - company names
+    InternetService = Column(String(100), unique=False, nullable=False)  # categorical - company names
     OnlineSecurity = Column(Integer, unique=False, nullable=False)      # categorical with 3 classes (0/1/2)
     OnlineBackup = Column(Integer, unique=False, nullable=False)        # categorical with 3 classes (0/1/2)
     DeviceProtection = Column(Integer, unique=False, nullable=False)    # categorical with 3 classes (0/1/2)
     TechSupport = Column(Integer, unique=False, nullable=False)         # categorical with 3 classes (0/1/2)
     StreamingTV = Column(Integer, unique=False, nullable=False)         # categorical with 3 classes (0/1/2)
     StreamingMovies = Column(Integer, unique=False, nullable=False)     # categorical with 3 classes (0/1/2)
-    Contract = Column(String(100), unique=True, nullable=False)         # categorical - contact type
+    Contract = Column(String(100), unique=False, nullable=False)         # categorical - contact type
     PaperlessBilling = Column(Integer, unique=False, nullable=False)    # binary (0/1)
-    PaymentMethod = Column(String(100),  unique=True, nullable=False)   # categorical - payment type
+    PaymentMethod = Column(String(100),  unique=False, nullable=False)   # categorical - payment type
     MonthlyCharges = Column(sql.Float, unique=False, nullable=False)    # double
     TotalCharges = Column(sql.Float, unique=False, nullable=False)      # double
 
