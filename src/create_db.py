@@ -1,11 +1,10 @@
 import os
+import sys
 import logging
 import sqlalchemy as sql
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine, Column, Integer, String, Text, Float, MetaData
 import logging.config
-import config
-import sys
 import config.flaskconfig as conf
 
 logger = logging.getLogger(__name__)
