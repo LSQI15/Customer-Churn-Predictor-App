@@ -13,14 +13,14 @@ def upload_data(args):
     :param args: The name of S3 bucket which data will be uploaded to
         local_file_path: path to the saved file
         file_name: the name of the file
-        bucket_url: link to the S3 bucket
+        bucket_name: link to the S3 bucket
     :return: None
     """
     s3 = boto3.client('s3')
     try:
         path = args.local_file_path + '/' + args.file_name
-        s3.upload_file(path, args.bucket_url, 'data/%s' % args.file_name)
-        logger.info("%s is successfully uploaded to bucket %s" % (args.file_name, args.bucket_url))
+        s3.upload_file(path, args.bucket_name, 'data/%s' % args.file_name)
+        logger.info("%s is successfully uploaded to bucket %s" % (args.file_name, args.bucket_name))
     except boto3.exceptions.S3UploadFailedError:
         logger.error("Error: upload unsuccessful.")
 
