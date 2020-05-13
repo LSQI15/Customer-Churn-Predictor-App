@@ -13,18 +13,18 @@ if __name__ == '__main__':
     sb_create_db.add_argument('--rds', default="False", help='Option to use RDS or not')
     sb_create_db.set_defaults(func=create_db)
 
-    # Sub-parser for downloading raw data from s3 bucket
+    # Sub-parser for downloading raw data from S3 bucket
     sb_download = subparsers.add_parser("download_data", description="Download data from S3 bucket")
     sb_download.add_argument('--local_file_path', help="Local folder where downloaded data will be saved")
     sb_download.add_argument('--file_name', help="File name of the data file")
     sb_download.add_argument('--source_url', help="AWS S3 bucket where the data is stored")
     sb_download.set_defaults(func=download_data)
 
-    # Sub-parser for uploading the data to S3
+    # Sub-parser for uploading the data to S3 bucket
     sb_upload = subparsers.add_parser("upload_data", description="Upload data into S3")
     sb_upload.add_argument('--local_file_path', help="Local folder containing data to be uploaded")
     sb_upload.add_argument('--file_name', help="File name of the data file")
-    sb_upload.add_argument('--bucket_url', help="AWS S3 bucket where the data will be stored")
+    sb_upload.add_argument('--bucket_name', help="AWS S3 bucket where the data will be stored")
     sb_upload.set_defaults(func=upload_data)
 
     args = parser.parse_args()
