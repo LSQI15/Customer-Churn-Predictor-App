@@ -10,13 +10,14 @@ LOGGING_CONFIG = os.path.join(PROJECT_ROOT, 'config/logging/local.conf')
 # App Config
 APP_NAME = "customer_churn"
 DEBUG = True
-PORT = 5000
-HOST = "0.0.0.0"
+
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 SQLALCHEMY_ECHO = False  # If true, SQL for queries made will be printed
 MAX_ROWS_SHOW = 100
 
 # Local Sqlite Database Connection Config
+PORT = 5000
+HOST = "0.0.0.0"
 DATABASE_PATH = os.path.join(PROJECT_ROOT, 'data/customer.db')
 LOCAL_ENGINE_STRING = 'sqlite:////{}'.format(DATABASE_PATH)
 
@@ -31,11 +32,3 @@ RDS_PORT = os.environ.get("MYSQL_PORT")
 DATABASE_NAME = os.environ.get("DATABASE_NAME")
 RDS_ENGINE_STRING = "{}://{}:{}@{}:{}/{}".\
 format(CONN_TYPE, RDS_USER, RDS_PASSWORD, RDS_HOST, RDS_PORT, DATABASE_NAME)
-
-# SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
-# if SQLALCHEMY_DATABASE_URI is not None:
-#     pass
-# elif RDS_HOST is None:
-#     SQLALCHEMY_DATABASE_URI = LOCAL_ENGINE_STRING
-# else:
-#     SQLALCHEMY_DATABASE_URI = RDS_ENGINE_STRING
