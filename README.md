@@ -79,8 +79,28 @@
     ```
     docker build -f app/Dockerfile -t customer_churn .
     ```
+
+### 2. Download/upload data from/to S3 bucket
+
+#### (a) Download raw data from Kaggle or the default S3 bucket
+
+Option 1: Kaggle
+
+The data can be directly downloaded from https://www.kaggle.com/blastchar/telco-customer-churn
+
+Option 2: S3 bucket
+
+To download the raw data from the default S3 bucket, you first need to update the AWS credentials `AWS_ACCESS_KEY_ID` and 
+`AWS_SECRET_ACCESS_KEY` in `config/.s3config`, and then run:
+
+    ```
+    docker run --env-file=config/.s3config --mount type=bind,source="$(pwd)"/data,target=/app/data customer_churn run.py download_data
+    ```
+This by default will download the data from the default S3 bucket and save it as `data/customer_churn.csv`
+
+#### (b) Upload data to an S3 bucket
     
-### 2. Initialize the database 
+### 3. Initialize the database 
 
 #### (a) Set up SQLite database locally
 
