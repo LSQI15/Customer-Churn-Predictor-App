@@ -78,100 +78,71 @@
 ## Running the app
 
 ### 1. Build the Docker image for executing the pipeline
-    ```
-    docker build -f app/Dockerfile -t customer_churn .
-    ```
+
+```bash
+docker build -f app/Dockerfile -t customer_churn .
+```
 
 ### 2. Download data from Kaggle 
 
 The data can be directly downloaded from `https://www.kaggle.com/blastchar/telco-customer-churn`. The downloaded dataset
-`raw_data.csv` is located in `data` folder
+`raw_data.csv` is located in the `data` folder
 
 ### 3. Upload data to a S3 bucket
 
-To upload the raw data to 
+To upload the raw data to a S3 bucket of your choice, you first need to update the AWS credentials `AWS_ACCESS_KEY_ID` 
+and `AWS_SECRET_ACCESS_KEY` in `config/.awsconfig`, and then run:
 
-    ```
-    docker run --env-file=config/.s3config customer_churn run.py upload_data --local_file_path=data --file_name=customer_churn.csv --bucket_name=msia423-customer-churn
-    ```
+```bash
+docker build -f app/Dockerfile -t customer_churn .
+docker run --env-file=config/.awsconfig customer_churn run.py upload_data --bucket_name=<YOUR_BUCKET_NAME>
+```
+    
+By default, it will upload `data/raw_data.csv` to `<YOUR_BUCKET_NAME>`
+
 ### 4. Initialize the database 
 
 #### (a) Set up SQLite database locally
 
-To create the database locally using SQLite, please edit the 'config/flaskconfig.py' file if you want to make change to the engine string, the host or 
-the port number. Otherwise, it will use the default Configurations:
-* PORT = 5000
-* HOST = "0.0.0.0"
-* LOCAL_ENGINE_STRING = 'sqlite:///data/customer.db'
+To create the database locally using SQLite, please edit the 'config/flaskconfig.py' file if you want to make change to 
+the engine string, the host or the port number. Otherwise, it will use the default Configurations:
+* `PORT = 5000`
+* `HOST = "0.0.0.0"`
+* `LOCAL_ENGINE_STRING = 'sqlite:///data/customer.db'`
 
-After updating the cofigurations, run: 
+After updating the configurations, run: 
     
-     ```
-    docker run --mount type=bind,source="$(pwd)"/data,target=/app/data customer_churn run.py create_db --rds=False
-    
-    ```
-By default, this will set up a table `customer` in the SQLite database instance `customer.db`.
+```
+docker build -f app/Dockerfile -t customer_churn .
+docker run --mount type=bind,source="$(pwd)"/data,target=/app/data customer_churn run.py create_db --rds=False
+```
+
+By default, this will set up a table `customer` in the SQLite database instance `data/customer.db` .
 
 #### (b) Set up Amazon AWS RDS 
 
-To create the database in Amazon AWS RDS, please first update the following credentials 
-in the `config/.mysqlconfig` file.
+To create the database in Amazon AWS RDS, please first update the following credentials:
 
- * AWS_ACCESS_KEY_ID
- * AWS_SECRET_ACCESS_KEY
- * MYSQL_USER 
- * MYSQL_PASSWORD
+* in `config/.awsconfig`: 
+    * `AWS_ACCESS_KEY_ID` 
+    * `AWS_SECRET_ACCESS_KEY` 
+* in `config/.mysqlconfig`:
+    * `MYSQL_USER` 
+    * `MYSQL_PASSWORD` 
 
-The default database configurations are:
-* MYSQL_HOST=msia423-siqi-li-project.ct7mjfzo5pv8.us-east-1.rds.amazonaws.com
-* MYSQL_PORT=3306
-* DATABASE_NAME=msia423_project_db
-* REGION=us-east-1
+The default MYSQL database configurations are: 
+* `MYSQL_HOST=msia423-siqi-li-project.ct7mjfzo5pv8.us-east-1.rds.amazonaws.com`
+* `MYSQL_PORT=3306`
+* `DATABASE_NAME=msia423_project_db`
 
 After finishing updating the `config/.mysqlconfig`, run:
 
     ```
-    docker run --env-file=config/.mysqlconfig customer_churn run.py create_db --rds=True
+    docker build -f app/Dockerfile -t customer_churn .
+    docker run --env-file=config/.mysqlconfig --env-file=config/.awsconfig customer_churn run.py create_db --rds=True
     ```
     
 By default, this will create a table named `customer` within the `msia423_project_db` database in RDS.
-
-
-#### Create the database with a single song 
-To create the database in the location configured in `config.py` with one initial song, run: 
-
-`python run.py create_db --engine_string=<engine_string> --artist=<ARTIST> --title=<TITLE> --album=<ALBUM>`
-
-By default, `python run.py create_db` creates a database at `sqlite:///data/tracks.db` with the initial song *Radar* by Britney spears. 
-#### Adding additional songs 
-To add an additional song:
-
-`python run.py ingest --engine_string=<engine_string> --artist=<ARTIST> --title=<TITLE> --album=<ALBUM>`
-
-By default, `python run.py ingest` adds *Minor Cause* by Emancipator to the SQLite database located in `sqlite:///data/tracks.db`.
-
-#### Defining your engine string 
-A SQLAlchemy database connection is defined by a string with the following format:
-
-`dialect+driver://username:password@host:port/database`
-
-The `+dialect` is optional and if not provided, a default is used. For a more detailed description of what `dialect` and `driver` are and how a connection is made, you can see the documentation [here](https://docs.sqlalchemy.org/en/13/core/engines.html). We will cover SQLAlchemy and connection strings in the SQLAlchemy lab session on 
-##### Local SQLite database 
-
-A local SQLite database can be created for development and local testing. It does not require a username or password and replaces the host and port with the path to the database file: 
-
-```python
-engine_string='sqlite:///data/tracks.db'
-
-```
-
-The three `///` denote that it is a relative path to where the code is being run (which is from the root of this directory).
-
-You can also define the absolute path with four `////`, for example:
-
-```python
-engine_string = 'sqlite://///Users/cmawer/Repos/2020-MSIA423-template-repository/data/tracks.db'
-```
 
 
 ### 2. Configure Flask app 
