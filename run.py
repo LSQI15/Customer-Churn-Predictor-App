@@ -23,8 +23,8 @@ if __name__ == '__main__':
 
     # Sub-parser for uploading the data to S3 bucket
     sb_upload = subparsers.add_parser("upload_data", description="Upload data into S3")
-    sb_upload.add_argument('--local_file_path', help="Local folder containing data to be uploaded")
-    sb_upload.add_argument('--file_name', help="File name of the data file")
+    sb_upload.add_argument('--local_file_path', default="data", help="Local folder containing data to be uploaded")
+    sb_upload.add_argument('--file_name', default="raw_data.csv", help="File name of the data file")
     sb_upload.add_argument('--bucket_name', help="AWS S3 bucket where the data will be stored")
     sb_upload.set_defaults(func=upload_data)
 
