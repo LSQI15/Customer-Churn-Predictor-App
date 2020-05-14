@@ -16,7 +16,11 @@
 - [Directory structure](#directory-structure)
 - [Running the app](#running-the-app)
   * [1. Build the Docker image for executing the pipeline](#1-Build-the-Docker-image-for-executing-the-pipeline)
-  * [2. Initialize the database](#2-Initialize-the-database)
+  * [2. Download data from Kaggle / S3 bucket](#2-Download-data-from-Kaggle-/-S3 bucket)
+    + [Option 1: Kaggle](#Option-1:-Kaggle)
+    + [Option 2: S3 bucket](#Option-2:-S3-bucket)
+  * [3. Upload data to a S3 bucket](#3-Upload-data-to-a-S3-bucket)
+  * [4. Initialize the database](#2-Initialize-the-database)
     + [SQLite database](#(a)-Set-up-SQLite-database-locally)
     + [Amazon AWS RDS](#(b)-Set-up-Amazon-AWS-RDS)
   * [2. Configure Flask app](#2-configure-flask-app)
@@ -80,15 +84,13 @@
     docker build -f app/Dockerfile -t customer_churn .
     ```
 
-### 2. Download/upload data from/to S3 bucket
+### 2. Download data from Kaggle / S3 bucket
 
-#### (a) Download raw data from Kaggle or the default S3 bucket
-
-Option 1: Kaggle
+#### Option 1: Kaggle
 
 The data can be directly downloaded from https://www.kaggle.com/blastchar/telco-customer-churn
 
-Option 2: S3 bucket
+#### Option 2: S3 bucket
 
 To download the raw data from the default S3 bucket, you first need to update the AWS credentials `AWS_ACCESS_KEY_ID` and 
 `AWS_SECRET_ACCESS_KEY` in `config/.s3config`, and then run:
@@ -98,9 +100,10 @@ To download the raw data from the default S3 bucket, you first need to update th
     ```
 This by default will download the data from the default S3 bucket and save it as `data/customer_churn.csv`
 
-#### (b) Upload data to an S3 bucket
+### 3. Upload data to a S3 bucket
+
     
-### 3. Initialize the database 
+### 4. Initialize the database 
 
 #### (a) Set up SQLite database locally
 
