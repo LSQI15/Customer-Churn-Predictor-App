@@ -29,16 +29,17 @@ def download_data(args):
     """
     Download data from a public S3 bucket to the local folder based on user input
     :param args
-        .file_name (String): name of the file
-        .source_url (String): link to the file in S3 bucket
+        .bucket_name (String): name of the S3 bucket; default bucket is 'msia423-customer-churn'
+        .s3_file: file to be downloaded; default is 'data/raw_data.csv'
         .local_file_path (String): path to the saved file
+        .file_name (String): name of the file
     :return: None
     """
     path = args.local_file_path + '/' + args.file_name
     try:
-        r = requests.get(args.source_url)
-        open(path, 'wb').write(r.content)
-        logger.info("%s is downloaded from S3 bucket %s to %s " % (args.file_name, args.source_url, args.local_file_path))
+        s3 = boto3.client('s3')
+        s3.download_file(args.bucket_name, args.s3_file, path)
+        logger.info("%s is downloaded from S3 bucket %s to %s " % (args.s3_file, args.bucket_name, path))
     except requests.exceptions.RequestException:
-        logger.error("Error: Unable to download %s from S3 bucket %s" % (args.file_name, args.source_url))
+        logger.error("Error: Unable to download %s from S3 bucket %s" % (args.s3_file, args.bucket_name))
 
