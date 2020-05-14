@@ -16,7 +16,7 @@
 - [Directory structure](#directory-structure)
 - [Running the app](#running-the-app)
   * [1. Build the Docker image for executing the pipeline](#1-Build-the-Docker-image-for-executing-the-pipeline)
-  * [2. Download data from Kaggle / S3 bucket](#2-Download-data-from-Kaggle-/-S3 bucket)
+  * [2. Download data from Kaggle / S3 bucket](#2-Download-data-from-Kaggle-/-S3-bucket)
     + [Option 1: Kaggle](#Option-1:-Kaggle)
     + [Option 2: S3 bucket](#Option-2:-S3-bucket)
   * [3. Upload data to a S3 bucket](#3-Upload-data-to-a-S3-bucket)
