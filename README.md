@@ -99,7 +99,7 @@ By default, it will upload `data/raw_data.csv` to `<YOUR_BUCKET_NAME>`
 
 #### (a) Set up SQLite database locally
 
-To create the database locally using SQLite, please edit the 'config/flaskconfig.py' file if you want to make change to 
+To create the database locally using SQLite, please edit the `config/flaskconfig.py` file if you want to make change to 
 the engine string, the host or the port number. Otherwise, it will use the default Configurations:
 
 * `PORT = 5000`
