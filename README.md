@@ -18,15 +18,9 @@
   * [1. Build the Docker image for executing the pipeline](#1-Build-the-Docker-image-for-executing-the-pipeline)
   * [2. Download data from Kaggle](#Download-data-from-Kaggle)
   * [3. Upload data to a S3 bucket](#3-Upload-data-to-a-S3-bucket)
-  * [4. Initialize the database](#2-Initialize-the-database)
+  * [4. Initialize the database to store user input](#4-Initialize-the-database-to-store-user-input)
     + [SQLite database](#(a)-Set-up-SQLite-database-locally)
     + [Amazon AWS RDS](#(b)-Set-up-Amazon-AWS-RDS)
-  * [2. Configure Flask app](#2-configure-flask-app)
-  * [3. Run the Flask app](#3-run-the-flask-app)
-- [Running the app in Docker](#running-the-app-in-docker)
-  * [1. Build the image](#1-build-the-image)
-  * [2. Run the container](#2-run-the-container)
-  * [3. Kill the container](#3-kill-the-container)
 - [Project Charter](#project-charter)
 
 <!-- tocstop -->
@@ -42,13 +36,12 @@
 │   ├── Dockerfile                    <- Dockerfile for building image to run app  
 │
 ├── config                            <- Directory for configuration files 
-│   ├── local/                        <- Directory for keeping environment variables and other local configurations that *do not sync** to Github 
 │   ├── logging/                      <- Configuration of python loggers
+│   ├── .awsconfig                    <- Configurations for AWS
+│   ├── .mysqlconfig                  <- Configurations for Amazon AWS RDS
 │   ├── flaskconfig.py                <- Configurations for Flask API 
 │
-├── data                              <- Folder that contains data used or generated. Only the external/ and sample/ subdirectories are tracked by git. 
-│   ├── external/                     <- External data sources, usually reference data,  will be synced with git
-│   ├── sample/                       <- Sample data used for code development and testing, will be synced with git
+├── data                              <- Folder that contains data used or generated. 
 │
 ├── deliverables/                     <- Any white papers, presentations, final work products that are presented or delivered to a stakeholder 
 │
@@ -66,7 +59,7 @@
 │
 ├── reference/                        <- Any reference material relevant to the project
 │
-├── src/                              <- Source data for the project 
+├── src/                              <- Source code for the project 
 │
 ├── test/                             <- Files necessary for running model tests (see documentation below) 
 │
@@ -79,6 +72,8 @@
 
 ### 1. Build the Docker image for executing the pipeline
 
+The Dockerfile for running the flask app is in the `app/` folder. To build the image, run:
+
 ```bash
 docker build -f app/Dockerfile -t customer_churn .
 ```
@@ -86,7 +81,7 @@ docker build -f app/Dockerfile -t customer_churn .
 ### 2. Download data from Kaggle 
 
 The data can be directly downloaded from `https://www.kaggle.com/blastchar/telco-customer-churn`. The downloaded dataset
-`raw_data.csv` is located in the `data` folder
+`raw_data.csv` is located in the `data` folder.
 
 ### 3. Upload data to a S3 bucket
 
@@ -100,19 +95,20 @@ docker run --env-file=config/.awsconfig customer_churn run.py upload_data --buck
     
 By default, it will upload `data/raw_data.csv` to `<YOUR_BUCKET_NAME>`
 
-### 4. Initialize the database 
+### 4. Initialize the database to store user input
 
 #### (a) Set up SQLite database locally
 
 To create the database locally using SQLite, please edit the 'config/flaskconfig.py' file if you want to make change to 
 the engine string, the host or the port number. Otherwise, it will use the default Configurations:
+
 * `PORT = 5000`
 * `HOST = "0.0.0.0"`
 * `LOCAL_ENGINE_STRING = 'sqlite:///data/customer.db'`
 
 After updating the configurations, run: 
     
-```
+```bash
 docker build -f app/Dockerfile -t customer_churn .
 docker run --mount type=bind,source="$(pwd)"/data,target=/app/data customer_churn run.py create_db --rds=False
 ```
@@ -137,74 +133,12 @@ The default MYSQL database configurations are:
 
 After finishing updating the `config/.mysqlconfig`, run:
 
-    ```
-    docker build -f app/Dockerfile -t customer_churn .
-    docker run --env-file=config/.mysqlconfig --env-file=config/.awsconfig customer_churn run.py create_db --rds=True
-    ```
+```bash
+docker build -f app/Dockerfile -t customer_churn .
+docker run --env-file=config/.mysqlconfig --env-file=config/.awsconfig customer_churn run.py create_db --rds=True
+```
     
 By default, this will create a table named `customer` within the `msia423_project_db` database in RDS.
-
-
-### 2. Configure Flask app 
-
-`config/flaskconfig.py` holds the configurations for the Flask app. It includes the following configurations:
-
-```python
-DEBUG = True  # Keep True for debugging, change to False when moving to production 
-LOGGING_CONFIG = "config/logging/local.conf"  # Path to file that configures Python logger
-HOST = "0.0.0.0" # the host that is running the app. 0.0.0.0 when running locally 
-PORT = 5000  # What port to expose app on. Must be the same as the port exposed in app/Dockerfile 
-SQLALCHEMY_DATABASE_URI = 'sqlite:///data/tracks.db'  # URI (engine string) for database that contains tracks
-APP_NAME = "penny-lane"
-SQLALCHEMY_TRACK_MODIFICATIONS = True 
-SQLALCHEMY_ECHO = False  # If true, SQL for queries made will be printed
-MAX_ROWS_SHOW = 100 # Limits the number of rows returned from the database 
-```
-
-### 3. Run the Flask app 
-
-To run the Flask app, run: 
-
-```bash
-python app.py
-```
-
-You should now be able to access the app at http://0.0.0.0:5000/ in your browser.
-
-## Running the app in Docker 
-
-### 1. Build the image 
-
-The Dockerfile for running the flask app is in the `app/` folder. To build the image, run from this directory (the root of the repo): 
-
-```bash
- docker build -f app/Dockerfile -t pennylane .
-```
-
-This command builds the Docker image, with the tag `pennylane`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
- 
-### 2. Run the container 
-
-To run the app, run from this directory: 
-
-```bash
-docker run -p 5000:5000 --name test pennylane
-```
-You should now be able to access the app at http://0.0.0.0:5000/ in your browser.
-
-This command runs the `pennylane` image as a container named `test` and forwards the port 5000 from container to your laptop so that you can access the flask app exposed through that port. 
-
-If `PORT` in `config/flaskconfig.py` is changed, this port should be changed accordingly (as should the `EXPOSE 5000` line in `app/Dockerfile`)
-
-### 3. Kill the container 
-
-Once finished with the app, you will need to kill the container. To do so: 
-
-```bash
-docker kill test 
-```
-
-where `test` is the name given in the `docker run` command.
 
 
 ## Project Charter 
