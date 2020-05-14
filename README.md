@@ -16,7 +16,7 @@
 - [Directory structure](#directory-structure)
 - [Running the app](#running-the-app)
   * [1. Build the Docker image for executing the pipeline](#1-Build-the-Docker-image-for-executing-the-pipeline)
-  * [2. Download data from Kaggle](#Download-data-from-Kaggle)
+  * [2. Download data from Kaggle](#2-Download-data-from-Kaggle)
   * [3. Upload data to a S3 bucket](#3-Upload-data-to-a-S3-bucket)
   * [4. Initialize the database to store user input](#4-Initialize-the-database-to-store-user-input)
     + [SQLite database](#(a)-Set-up-SQLite-database-locally)
