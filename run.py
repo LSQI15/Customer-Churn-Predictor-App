@@ -15,9 +15,10 @@ if __name__ == '__main__':
 
     # Sub-parser for downloading raw data from S3 bucket
     sb_download = subparsers.add_parser("download_data", description="Download data from S3 bucket")
-    sb_download.add_argument('--local_file_path', help="Local folder where downloaded data will be saved")
-    sb_download.add_argument('--file_name', help="File name of the data file")
-    sb_download.add_argument('--source_url', help="AWS S3 bucket where the data is stored")
+    sb_download.add_argument('--local_file_path', default="data", help="Local folder where downloaded data will be saved")
+    sb_download.add_argument('--file_name', default="customer_churn.csv", help="File name of the data file")
+    sb_download.add_argument('--bucket_name', default="msia423-customer-churn", help="AWS S3 bucket where the data is stored")
+    sb_download.add_argument('--s3_file', default="data/raw_data.csv", help="File to be downloaded")
     sb_download.set_defaults(func=download_data)
 
     # Sub-parser for uploading the data to S3 bucket
