@@ -93,7 +93,7 @@ docker build -f app/Dockerfile -t customer_churn .
 docker run --env-file=config/.awsconfig customer_churn run.py upload_data --bucket_name=<YOUR_BUCKET_NAME>
 ```
     
-By default, it will upload `data/raw_data.csv` to `<YOUR_BUCKET_NAME>`
+By default, it will upload `data/raw_data.csv` to the `data` folder in `<YOUR_BUCKET_NAME>`
 
 ### 4. Initialize the database to store user input
 
