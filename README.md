@@ -15,10 +15,12 @@
 
 - [Directory structure](#directory-structure)
 - [Running the app](#running-the-app)
-  * [1. Build the Docker image for executing the pipeline](#1-Build-the-Docker-image-for-executing-the-pipeline)
-  * [2. Download data from Kaggle](#2-Download-data-from-Kaggle)
-  * [3. Upload data to a S3 bucket](#3-Upload-data-to-a-S3-bucket)
-  * [4. Initialize the database to store user input](#4-Initialize-the-database-to-store-user-input)
+  * [1. Clone the Repository](#1-Clone-the-Repository)
+  * [2. Set up configurations](#2-Set-up-configurations)
+  * [3. Build the Docker image for executing the pipeline](#3-Build-the-Docker-image-for-executing-the-pipeline)
+  * [4. Download data from Kaggle](#4-Download-data-from-Kaggle)
+  * [5. Upload data to a S3 bucket](#5-Upload-data-to-a-S3-bucket)
+  * [6. Initialize the database to store user input](#6-Initialize-the-database-to-store-user-input)
     + [SQLite database](#(a)-Set-up-SQLite-database-locally)
     + [Amazon AWS RDS](#(b)-Set-up-Amazon-AWS-RDS)
 - [Project Charter](#project-charter)
@@ -70,7 +72,54 @@
 
 ## Running the app
 
-### 1. Build the Docker image for executing the pipeline
+### 1. Clone the Repository
+
+In order to run the app, you first need to clone the repo to your local machine by running the following bash command.
+
+```bash
+# clone the development branch of the repo 
+git clone -b development git@github.com:LSQI15/2020-msia423-Li-Siqi.git
+
+# update  working directory
+cd 2020-msia423-Li-Siqi
+```
+
+### 2. Set up configurations
+
+#### (a) Local SQLite database configurations
+
+Please edit the `config/flaskconfig.py` file if you want to make change to the SQLite database name, the host, or the port 
+number. Otherwise, it will use the default configurations:
+
+* `PORT = 5000`
+* `HOST = "0.0.0.0"`
+* `LOCAL_DATABASE="customer.db"`
+
+#### (b) AWS credential
+
+To access the S3 bucket or upload data/file to a S3 bucket of your choice, you need to update the AWS credentials 
+`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in `config/.awsconfig` by running the following bash command:
+
+```bash
+vi config/.awsconfig
+```
+
+Type `i` to enter the insert mode to make changes to the file. After finishing editing, press `ESC` to exit and 
+type `wq` to save the change.
+
+#### (c) AWS RDS configurations
+
+To access the AWS RDS database, please update `MYSQL_USER` and `MYSQL_PASSWORD` in `config/.mysqlconfig`, by running 
+the following bash command:
+
+```bash
+vi config/.mysqlconfig
+```
+
+Type `i` to enter the insert mode to make changes to the file. After finishing editing, press `ESC` to exit and 
+type `wq` to save the change.
+
+### 3. Build the Docker image for executing the pipeline
 
 The Dockerfile for running the flask app is in the `app/` folder. To build the image, run:
 
@@ -78,38 +127,28 @@ The Dockerfile for running the flask app is in the `app/` folder. To build the i
 docker build -f app/Dockerfile -t customer_churn .
 ```
 
-### 2. Download data from Kaggle 
+### 4. Download data from Kaggle 
 
-The data can be directly downloaded from `https://www.kaggle.com/blastchar/telco-customer-churn`. The downloaded dataset
-`raw_data.csv` is located in the `data` folder.
+The data can be directly downloaded from `https://www.kaggle.com/blastchar/telco-customer-churn`. For your convenience,
+the downloaded dataset `raw_data.csv` is located in the `data` folder.
 
-### 3. Upload data to a S3 bucket
+### 5. Upload data to a S3 bucket
 
-To upload the raw data to a S3 bucket of your choice, you first need to update the AWS credentials `AWS_ACCESS_KEY_ID` 
-and `AWS_SECRET_ACCESS_KEY` in `config/.awsconfig`, and then run:
+To upload the raw data to a S3 bucket of your choice, run:
 
 ```bash
-docker build -f app/Dockerfile -t customer_churn .
 docker run --env-file=config/.awsconfig customer_churn run.py upload_data --bucket_name=<YOUR_BUCKET_NAME>
 ```
     
 By default, it will upload `data/raw_data.csv` to the `data` folder in `<YOUR_BUCKET_NAME>`
 
-### 4. Initialize the database to store user input
+### 6. Initialize the database to store user input
 
 #### (a) Set up SQLite database locally
 
-To create the database locally using SQLite, please edit the `config/flaskconfig.py` file if you want to make change to 
-the engine string, the host or the port number. Otherwise, it will use the default Configurations:
-
-* `PORT = 5000`
-* `HOST = "0.0.0.0"`
-* `LOCAL_ENGINE_STRING = 'sqlite:///data/customer.db'`
-
-After updating the configurations, run: 
+To create the database locally using SQLite, run: 
     
 ```bash
-docker build -f app/Dockerfile -t customer_churn .
 docker run --mount type=bind,source="$(pwd)"/data,target=/app/data customer_churn run.py create_db --rds=False
 ```
 
@@ -117,24 +156,14 @@ By default, this will set up a table `customer` in the SQLite database instance 
 
 #### (b) Set up Amazon AWS RDS 
 
-To create the database in Amazon AWS RDS, please first update the following credentials:
-
-* in `config/.awsconfig`: 
-    * `AWS_ACCESS_KEY_ID` 
-    * `AWS_SECRET_ACCESS_KEY` 
-* in `config/.mysqlconfig`:
-    * `MYSQL_USER` 
-    * `MYSQL_PASSWORD` 
-
 The default MYSQL database configurations are: 
 * `MYSQL_HOST=msia423-siqi-li-project.ct7mjfzo5pv8.us-east-1.rds.amazonaws.com`
 * `MYSQL_PORT=3306`
 * `DATABASE_NAME=msia423_project_db`
 
-After finishing updating the `config/.mysqlconfig`, run:
+To create the database in Amazon AWS RDS, run:
 
 ```bash
-docker build -f app/Dockerfile -t customer_churn .
 docker run --env-file=config/.mysqlconfig --env-file=config/.awsconfig customer_churn run.py create_db --rds=True
 ```
     
