@@ -169,11 +169,7 @@ By default, this will create a table named `customer` within the  RDS <DATABASE_
 To access the default RDS database, please enter the following bash commands in your terminal:
 
 ```bash
-export MYSQL_USER=<msia423instructor/msia423qa>
-export MYSQL_PASSWORD=slx4192
-export MYSQL_HOST=msia423-siqi-li-project.ct7mjfzo5pv8.us-east-1.rds.amazonaws.com
-export MYSQL_PORT=3306
-export DATABASE_NAME=msia423_project_db
+source config/.defaultRDS
 sh src/run_mysql_client.sh
 ```
 
