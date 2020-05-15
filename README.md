@@ -109,8 +109,8 @@ type `wq` to save the change.
 
 #### (c) AWS RDS configurations
 
-To access the AWS RDS database, please update `MYSQL_USER` and `MYSQL_PASSWORD` in `config/.mysqlconfig`, by running 
-the following bash command:
+To create a table in your AWS RDS database, please update `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_HOST`, `MYSQL_PORT`,
+and `DATABASE_NAME` in `config/.mysqlconfig`, by running the following bash command:
 
 ```bash
 vi config/.mysqlconfig
@@ -156,19 +156,33 @@ By default, this will set up a table `customer` in the SQLite database instance 
 
 #### (b) Set up Amazon AWS RDS 
 
-The default MYSQL database configurations are: 
-* `MYSQL_HOST=msia423-siqi-li-project.ct7mjfzo5pv8.us-east-1.rds.amazonaws.com`
-* `MYSQL_PORT=3306`
-* `DATABASE_NAME=msia423_project_db`
-
 To create the database in Amazon AWS RDS, run:
 
 ```bash
 docker run --env-file=config/.mysqlconfig --env-file=config/.awsconfig customer_churn run.py create_db --rds=True
 ```
     
-By default, this will create a table named `customer` within the `msia423_project_db` database in RDS.
+By default, this will create a table named `customer` within the  RDS <DATABASE_NAME> you specified in `flaskconfig.py`.
 
+#### (c) Access the default RDS database
+
+To access the default RDS database, please enter the following bash commands in your terminal:
+
+```bash
+export MYSQL_USER=<msia423instructor/msia423qa>
+export MYSQL_PASSWORD=slx4192
+export MYSQL_HOST=msia423-siqi-li-project.ct7mjfzo5pv8.us-east-1.rds.amazonaws.com
+export MYSQL_PORT=3306
+export DATABASE_NAME=msia423_project_db
+sh src/run_mysql_client.sh
+```
+
+After that, run the following MYSQL commands:
+
+```mysql
+use msia423_project_db;
+describe customer;
+```
 
 ## Project Charter 
 
