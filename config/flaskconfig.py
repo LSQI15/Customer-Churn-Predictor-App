@@ -18,7 +18,8 @@ MAX_ROWS_SHOW = 100
 # Local Sqlite Database Connection Config
 PORT = 5000
 HOST = "0.0.0.0"
-DATABASE_PATH = os.path.join(PROJECT_ROOT, 'data/customer.db')
+LOCAL_DATABASE="customer.db"
+DATABASE_PATH = os.path.join(PROJECT_ROOT, 'data/{}'.format(LOCAL_DATABASE))
 LOCAL_ENGINE_STRING = 'sqlite:////{}'.format(DATABASE_PATH)
 
 # RDS Database Connection Config
