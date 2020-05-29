@@ -172,7 +172,7 @@ To access the default RDS database, please enter the following bash commands in 
 source config/.defaultRDS
 sh src/run_mysql_client.sh
 ```
-
+ 
 After that, run the following MYSQL commands:
 
 ```mysql
