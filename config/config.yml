@@ -1,0 +1,6 @@
+run_download_data:
+  download_data:
+    bucket_name: 'msia423-customer-churn'
+    s3_file: 'data/raw_data.csv'
+    file_path: 'data'
+    file_name: 'raw.csv'
