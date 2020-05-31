@@ -31,7 +31,7 @@ def download_data(args):
     data_downloader(**config['run_download_data']['download_data'])
 
 
-def data_downloader(bucket_name,s3_file, file_path,file_name):
+def data_downloader(bucket_name, s3_file, file_path, file_name):
     """
     Helper function to data from a S3 bucket to the local folder based on user input
     :param bucket_name: name of the S3 bucket; default bucket is
