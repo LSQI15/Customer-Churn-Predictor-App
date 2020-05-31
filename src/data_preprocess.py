@@ -18,6 +18,9 @@ def preprocess_data(args):
         # 1. replace spaces with NaN in the TotalCharges column
         df['TotalCharges'] = df["TotalCharges"].replace(" ", np.nan).astype(float)
         logger.info("Space in TotalCharges column has been replaced with NaN")
+        # drop 11 (0.156%) rows that contains NaN values
+        df = df.dropna()
+        logger.info("NaN values ha been dropped.")
         # 2.1 replace binary values to "Yes" or "No"
         df["SeniorCitizen"] = df["SeniorCitizen"].replace({1: "Yes", 0: "No"})
         logger.info("Binary values have been replaced with Yes/No")
