@@ -30,8 +30,6 @@ def feaurize(args):
         multi_cols = [i for i in cat_features if i not in bi_cols]
         df = pd.get_dummies(data=df, columns=multi_cols, drop_first=True)
         logger.info("Multi-category columns have been encoded.")
-        # drop 11 (0.156%) observations that contains nan values
-        df = df.dropna()
         # export featurized file to csv
         df_to_csv(df, **config['run_featurize_data']['save_csv'])
     except:
