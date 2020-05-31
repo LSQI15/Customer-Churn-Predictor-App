@@ -57,9 +57,23 @@ def create_db(args):
         logger.error("Error: unable to create database at %s" % args.engine_string)
 
 
+def ingest_db(df, engine_string):
+    """
+    helper function to add records to the existing database based on a data frame
+    :param df: a pandas data frame ready to be ingested to the database
+    :param engine_string: engine string of the database
+    :return: None
+    """
+    try:
+        df.to_sql(con=engine_string, index=False, name=Customer.__tablename__, if_exists='append')
+        logger.info('Successfully ingested records to the database.')
+    except:
+        logger.error('Error: unable to ingest records to the database')
+
+
 def initial_ingest(args):
     """
-    initial ingest - ingest the database with 10 observations
+    main function to conduct initial ingestion to the database
     :param args: Argparse args - should include args.engine_string, args.config
     :return: None
     """
@@ -68,14 +82,12 @@ def initial_ingest(args):
             config = yaml.load(f, Loader=yaml.SafeLoader)
         # load the random forest model
         rf = load_model(**config['run_create_db']['init_ingest'])
-        # treat the first 10 rows of the preprocessed data as initial records
-        # TODO: changed to the entire preprocessed
-        df = csv_reader(**config['run_create_db']['init_df']).drop('Churn', axis=1).head(10)
+        # add all existing records in the preprocessed data to the database
+        df = csv_reader(**config['run_create_db']['init_df']).drop('Churn', axis=1)
         # make a data frame that is ready for ingestion
         ingest_df = make_ingest_df(rf, df)
         # add customers to the database.
-        ingest_df.to_sql(con=args.engine_string, index=False, name=Customer.__tablename__, if_exists='append')
-        logger.info('Successfully conducted initial ingestion to the database.')
+        ingest_db(ingest_df, args.engine_string)
     except:
         logger.error('Error: unable to conduct initial ingestion to the database')
 
