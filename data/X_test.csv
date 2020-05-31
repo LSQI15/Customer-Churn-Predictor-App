@@ -1,4 +1,4 @@
-gender,SeniorCitizen,Partner,Dependents,tenure,PhoneService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies,PaperlessBilling,MonthlyCharges,TotalCharges,MultipleLines_No phone service,MultipleLines_Yes,InternetService_Fiber optic,InternetService_No,Contract_One year,Contract_Two year,PaymentMethod_Credit card (automatic),PaymentMethod_Electronic check,PaymentMethod_Mailed check
+Gender,SeniorCitizen,Partner,Dependents,Tenure,PhoneService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies,PaperlessBilling,MonthlyCharges,TotalCharges,MultipleLines_No phone service,MultipleLines_Yes,InternetService_Fiber optic,InternetService_No,Contract_One year,Contract_Two year,PaymentMethod_Credit card (automatic),PaymentMethod_Electronic check,PaymentMethod_Mailed check
 1,0,0,1,62,1,1,1,0,0,0,0,0,56.15,3487.95,0,0,0,0,1,0,0,0,0
 1,1,1,0,50,1,1,0,1,0,1,1,1,105.05,5163.3,0,1,1,0,0,1,1,0,0
 1,0,0,0,47,1,1,1,0,0,1,0,0,94.8,4535.85,0,1,1,0,1,0,0,0,0
