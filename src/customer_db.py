@@ -1,15 +1,10 @@
 import sqlalchemy as sql
 import logging.config
 import yaml
-import pandas as pd
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine, Column, Integer, String, Float
 from sqlalchemy.orm import sessionmaker
-from src.helper import csv_reader
-from src.churn_predictor import load_model, make_ingest_df
-
-
-import config.flaskconfig as conf
+from src.helper import csv_reader, load_model, make_ingest_df
 
 logger = logging.getLogger(__name__)
 Base = declarative_base()
@@ -51,7 +46,7 @@ class Customer(Base):
 def create_db(args):
     """
     Create the database locally or in RDS
-    :param args: Argparse args - should include args.SQLALCHEMY_DATABASE_URI
+    :param args: Argparse args - should include args.engine_string
     :return: None
     """
     try:
@@ -64,8 +59,8 @@ def create_db(args):
 
 def initial_ingest(args):
     """
-    intitial ingest - ingest the database with 10 observations
-    :param args: Argparse args - should include args.title, args.artist, args.album
+    initial ingest - ingest the database with 10 observations
+    :param args: Argparse args - should include args.engine_string, args.config
     :return: None
     """
     try:
@@ -74,6 +69,7 @@ def initial_ingest(args):
         # load the random forest model
         rf = load_model(**config['run_create_db']['init_ingest'])
         # treat the first 10 rows of the preprocessed data as initial records
+        # TODO: changed to the entire preprocessed
         df = csv_reader(**config['run_create_db']['init_df']).drop('Churn', axis=1).head(10)
         # make a data frame that is ready for ingestion
         ingest_df = make_ingest_df(rf, df)
