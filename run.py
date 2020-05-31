@@ -13,7 +13,7 @@ from src.eda import eda
 from src.model_training import random_forest
 from src.model_evaluation import evaluate_model
 from config.flaskconfig import SQLALCHEMY_DATABASE_URI
-from src.create_db import create_db, initial_ingest
+from src.customer_db import create_db, initial_ingest
 
 
 if __name__ == '__main__':
@@ -64,8 +64,6 @@ if __name__ == '__main__':
                               help="SQLAlchemy connection URI for database")
     sb_init_ingest.add_argument('--config', help='path to yaml file with configurations')
     sb_init_ingest.set_defaults(func=initial_ingest)
-
-
 
     # Sub-parser for uploading the data to S3 bucket
     sb_upload = subparsers.add_parser("upload_data", description="Upload data into S3")
