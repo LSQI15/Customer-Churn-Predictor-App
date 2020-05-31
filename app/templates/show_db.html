@@ -7,25 +7,25 @@
 
 <body>
     <h3>
-         <a href = "{{ url_for('index') }}">Penny Lane Music Recommender</a>
+         <a href = "{{ url_for('index') }}">Customer Churn Analysis</a>
     </h3>
 
     <hr/>
     <table>
          <thead>
             <tr>
-               <th>Title</th>
-               <th>Artist</th>
-               <th>Album</th>
+               <th>Customer_ID</th>
+               <th>Predicted_Probability</th>
+               <th>Predicted_Outcome</th>
             </tr>
          </thead>
 
          <tbody>
-            {% for track in tracks %}
+            {% for customer in customers %}
                <tr>
-                   <td>{{ track.title }}</td>
-                   <td>{{ track.artist }}</td>
-                   <td>{{ track.album }}</td>
+                   <td>{{ customer.id }}</td>
+                   <td>{{ customer.PredProbability}}</td>
+                   <td>{{ customer.PredClass }}</td>
                </tr>
             {% endfor %}
          </tbody>
