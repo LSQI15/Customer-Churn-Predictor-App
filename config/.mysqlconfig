@@ -1,5 +1,0 @@
-MYSQL_USER=YOUR_USER_NAME
-MYSQL_PASSWORD=YOUR_PASSWORD
-MYSQL_HOST=msia423-siqi-li-project.ct7mjfzo5pv8.us-east-1.rds.amazonaws.com
-MYSQL_PORT=3306
-DATABASE_NAME=msia423_project_db
