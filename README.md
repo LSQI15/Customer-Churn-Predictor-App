@@ -98,34 +98,118 @@ number. Otherwise, it will use the default configurations:
 #### (b) AWS credential
 
 To access the S3 bucket or upload data/file to a S3 bucket of your choice, you need to update the AWS credentials 
-`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in `config/.awsconfig` by running the following bash command:
+`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in `config/.env` by running the following bash command:
 
 ```bash
 vi config/.awsconfig
 ```
 
 Type `i` to enter the insert mode to make changes to the file. After finishing editing, press `ESC` to exit and 
-type `wq` to save the change.
+type `:wq` to save the change.
 
 #### (c) AWS RDS configurations
 
 To create a table in your AWS RDS database, please update `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_HOST`, `MYSQL_PORT`,
-and `DATABASE_NAME` in `config/.mysqlconfig`, by running the following bash command:
+and `DATABASE_NAME` in `config/.env`, by running the following bash command:
 
 ```bash
 vi config/.mysqlconfig
 ```
 
 Type `i` to enter the insert mode to make changes to the file. After finishing editing, press `ESC` to exit and 
-type `wq` to save the change.
+type `:wq` to save the change.
 
 ### 3. Build the Docker image for executing the pipeline
 
-The Dockerfile for running the flask app is in the `app/` folder. To build the image, run:
+The Dockerfile for running the model pipeline is in the `app/` folder. To build the image, run:
 
 ```bash
 docker build -f app/Dockerfile -t customer_churn .
 ```
+
+### 4. Execute the entire model pipeline
+
+To run the entire model pipeline (clean working directory, download data, preprocess data, create feature, doing 
+exploratory data analysis, training a random_forest model, and evaluate model performance), run:
+
+```bash
+docker run --env-file=config/.env --mount type=bind,source="$(pwd)",target=/app/ customer_churn all_pipeline
+```
+
+### 5. Execute model pipeline step by step
+
+#### 5.1 Clean the working directory
+
+```bash
+docker run --mount type=bind,source="$(pwd)",target=/app/ customer_churn clean
+```
+
+#### 5.2 Download raw data from S3 bucket
+
+```bash
+docker run --env-file=config/.env --mount type=bind,source="$(pwd)",target=/app/ customer_churn download
+```
+
+#### 5.3 Preprocess the raw data
+
+```bash
+docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn preprocess
+```
+
+#### 5.4 Featurize the preprocessed data
+
+```bash
+docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn feature
+```
+
+#### 5.5 Conduct Exploratory Data Analysis
+
+```bash
+docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn eda
+```
+
+#### 5.6 Train a random forest model
+
+```bash
+docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn random_forest
+```
+
+#### 5.6 Evaluate model performance
+
+```bash
+docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn evaluate
+```
+
+### 6. Running the customer churn predictor app
+
+To run the customer churn predictor app, you first need to create either a local SQLite database or an AWS RDS database
+in order to store user inputs. If you choose to use AWS RDS database, please make sure your have entered your AWS
+credentials and update RDS configurations before building the Docker container. If not, please update these configurations
+following instructions in section 2, and then rebuild the Docker container.
+
+```bash
+#################################
+# Option 1: local SQLite database
+#################################
+docker run --mount type=bind,source="$(pwd)",target=/app/ customer_churn create_db
+docker run --mount type=bind,source="$(pwd)",target=/app/ customer_churn initial_ingest
+
+#################################
+# Option 2: AWS RDS database
+#################################
+docker run --env-file=config/.env customer_churn create_db
+docker run --env-file=config/.env customer_churn initial_ingest
+```
+
+After you set up the database, run the following bash command to activate the app. By default, the app will be running 
+on a local host at http://0.0.0.0:5000/. You can press CTRL+C to quit.
+
+```bash
+source config/.env # if you want to use AWS RDS database
+python3 app.py
+```
+
+####################################################################
 
 ### 4. Download data from Kaggle 
 

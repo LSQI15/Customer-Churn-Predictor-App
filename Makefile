@@ -27,10 +27,10 @@ random_forest: config/config.yml
 evaluate: config/config.yml
 	python3 run.py evaluate_model --config=config/config.yml
 
-create_db: config/.awsconfig config/.mysqlconfig
+create_db: config/.env
 	python3 run.py create_db
 
-initial_ingest: config/.awsconfig config/.mysqlconfig
+initial_ingest: config/.env
 	python3 run.py initial_ingest --config=config/config.yml
 
 all_pipeline: clean download preprocess feature eda random_forest evaluate
