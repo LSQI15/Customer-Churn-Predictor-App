@@ -95,25 +95,20 @@ number. Otherwise, it will use the default configurations:
 * `HOST = "0.0.0.0"`
 * `LOCAL_DATABASE="customer.db"`
 
-#### (b) AWS credential
+#### (b) AWS credential & RDS configurations
 
 To access the S3 bucket or upload data/file to a S3 bucket of your choice, you need to update the AWS credentials 
 `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in `config/.env` by running the following bash command:
 
 ```bash
-vi config/.awsconfig
+vi config/.env
 ```
-
-Type `i` to enter the insert mode to make changes to the file. After finishing editing, press `ESC` to exit and 
-type `:wq` to save the change.
-
-#### (c) AWS RDS configurations
 
 To create a table in your AWS RDS database, please update `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_HOST`, `MYSQL_PORT`,
 and `DATABASE_NAME` in `config/.env`, by running the following bash command:
 
 ```bash
-vi config/.mysqlconfig
+vi config/.env
 ```
 
 Type `i` to enter the insert mode to make changes to the file. After finishing editing, press `ESC` to exit and 
