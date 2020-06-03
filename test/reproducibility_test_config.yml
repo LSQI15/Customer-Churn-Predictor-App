@@ -1,0 +1,50 @@
+raw:
+  command: python3 run.py download_data --config=config/config.yml
+  true_dir: test/true/
+  test_dir: data/
+  files_to_compare:
+    - raw.csv
+
+preprocess:
+  command: python3 run.py preprocess_data --config=config/config.yml
+  true_dir: test/true/
+  test_dir: data/
+  files_to_compare:
+    - preprocessed.csv
+
+featurize:
+  command: python3 run.py feaurize --config=config/config.yml
+  true_dir: test/true/
+  test_dir: data/
+  files_to_compare:
+    - featurized.csv
+
+eda:
+  command: python3 run.py feaurize --config=config/config.yml
+  true_dir: test/true/
+  test_dir: models/
+  files_to_compare:
+    - summary_statistics.csv
+
+random_forest:
+  command: python3 run.py random_forest --config=config/config.yml
+  true_dir: test/true/
+  test_dir: models/
+  files_to_compare:
+    - X_train.csv
+    - X_test.csv
+    - y_train.csv
+    - y_test.csv
+    - predictions.csv
+    - feature_importance.csv
+
+evaluate:
+  command: python3 run.py evaluate_model --config=config/config.yml
+  true_dir: test/true/
+  test_dir: models/
+  files_to_compare:
+    - evaluation_auc_accuracy.csv
+    - evaluation_confusion_matrix.csv
+    - evaluation_classification_report.csv
+
+
