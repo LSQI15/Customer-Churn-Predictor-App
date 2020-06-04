@@ -18,20 +18,16 @@ def choose_target(data, target):
     :param target: the column name of the response variable y
     :return: a pandas DataFrame containing only the response variable y
     """
-    try:
-        if target is None:
-            logger.error("Error: target column is None.")
-            return None
-        else:
-            if target in data.columns:
-                logger.info("target column for model training has been chosen.")
-                return data[target]
-            else:
-                logger.error("Error: target column not found in the dataset.")
-                return None
-    except:
-        logger.error("Error: Unable to select target column for model training. Return None")
+    if target is None:
+        logger.error("Error: target column is None.")
         return None
+    else:
+        if target in data.columns:
+            logger.info("target column for model training has been chosen.")
+            return data[target]
+        else:
+            logger.error("Error: target column not found in the dataset.")
+            raise KeyError("%s is not in the input data frame." % target)
 
 
 def choose_features(data, features):
@@ -47,6 +43,8 @@ def choose_features(data, features):
             for col in data.columns:
                 if col in features:
                     valid_features.append(col)
+                else:
+                    logger.error('Feature \'%s\' is not in the data frame. Skipped.' % col)
         if valid_features is None:
             logger.error("Error: no feature is chosen. Return None")
             return None
