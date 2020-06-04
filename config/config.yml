@@ -9,6 +9,8 @@ run_preprocess_data:
   read_csv:
     file_path: 'data'
     file_name: 'raw.csv'
+  internet:
+    cols: ['OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies']
   save_csv:
     file_path: 'data'
     file_name: 'preprocessed.csv'
@@ -55,16 +57,16 @@ run_randomForest:
                    'PaymentMethod_Electronic check', 'PaymentMethod_Mailed check']
     test_prop: 0.2
   X_train:
-    file_path: 'data'
+    file_path: 'models'
     file_name: 'X_train.csv'
   X_test:
-    file_path: 'data'
+    file_path: 'models'
     file_name: 'X_test.csv'
   y_train:
-    file_path: 'data'
+    file_path: 'models'
     file_name: 'y_train.csv'
   y_test:
-    file_path: 'data'
+    file_path: 'models'
     file_name: 'y_test.csv'
   rf_to_local:
     file_path: 'models'
@@ -86,12 +88,12 @@ run_randomForest:
     file_path: "models"
     file_name: "feature_importance.png"
   predictions:
-    file_path: 'data'
+    file_path: 'models'
     file_name: 'predictions.csv'
 
 run_model_evaluator:
   evaluate_model:
-    file_path: 'data'
+    file_path: 'models'
     file_name: 'predictions.csv'
   auc_accuracy_processor:
     file_path: "models"
