@@ -86,10 +86,10 @@ cd 2020-msia423-Li-Siqi
 
 ### 2. Set up configurations
 
-#### (a) Local SQLite database configurations
+#### (a) Flask app configurations
 
-Please edit the `config/flaskconfig.py` file if you want to make change to the SQLite database name, the host, or the port 
-number. Otherwise, it will use the default configurations:
+Please edit the `config/flaskconfig.py` file if you want to make change to the SQLite database name, the host, or the 
+port number. Otherwise, the flask app will use the default configurations:
 
 * `PORT = 5000`
 * `HOST = "0.0.0.0"`
@@ -97,21 +97,15 @@ number. Otherwise, it will use the default configurations:
 
 #### (b) AWS credential & RDS configurations
 
-To access the S3 bucket or upload data/file to a S3 bucket of your choice, you need to update the AWS credentials 
-`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in `config/.env` by running the following bash command:
+Step 1 of the model pipeline will require AWS credentials in order to download the raw data from a s3 bucket, As a 
+result, you need to update the AWS credentials `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in `config/.aws` by 
+running the following bash command:
 
 ```bash
-vi config/.env
+vi config/.aws
 ```
 
-To create a table in your AWS RDS database, please update `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_HOST`, `MYSQL_PORT`,
-and `DATABASE_NAME` in `config/.env`, by running the following bash command:
-
-```bash
-vi config/.env
-```
-
-Type `i` to enter the insert mode to make changes to the file. After finishing editing, press `ESC` to exit and 
+Note: type `i` to enter the insert mode to make changes to the file. After finishing editing, press `ESC` to exit and 
 type `:wq` to save the change.
 
 ### 3. Build the Docker image for executing the pipeline
@@ -128,12 +122,19 @@ To run the entire model pipeline (clean working directory, download data, prepro
 exploratory data analysis, training a random_forest model, and evaluate model performance), run:
 
 ```bash
-docker run --env-file=config/.env --mount type=bind,source="$(pwd)",target=/app/ customer_churn all_pipeline
+docker run --env-file=config/.aws --mount type=bind,source="$(pwd)",target=/app/ customer_churn all_pipeline
 ```
+
+After running the above command, all data-related files (raw data, preprocessed data, and featurized data) will be store
+in `data/`. All models related files such as EDA graphs, training set, test set, random forest model, and model evaluations
+will can be found in `models/`.
 
 ### 5. Execute model pipeline step by step
 
 #### 5.1 Clean the working directory
+
+The first step in the model pipeline is to clean the working directory. The following command will remove any existing 
+files in `data` and `model` folders so that you can have a fresh working directory to execute the model pipeline.
 
 ```bash
 docker run --mount type=bind,source="$(pwd)",target=/app/ customer_churn clean
@@ -141,11 +142,23 @@ docker run --mount type=bind,source="$(pwd)",target=/app/ customer_churn clean
 
 #### 5.2 Download raw data from S3 bucket
 
+To download the raw data from the default S3 bucket, run the following bash command. By default, the raw data will be 
+downloaded to the `data` folder.
+
 ```bash
-docker run --env-file=config/.env --mount type=bind,source="$(pwd)",target=/app/ customer_churn download
+docker run --env-file=config/.aws --mount type=bind,source="$(pwd)",target=/app/ customer_churn download
 ```
 
 #### 5.3 Preprocess the raw data
+
+The following command will preprocess the raw data. Specifically, it will 
+* process TotalCharges column - convert spaces to NaN and drop 11 missing values
+* process SeniorCitizen column - convert from binary 1/0 to Yes/No
+* replace 'No internet service' to 'No' for the following 6 columns 'OnlineSecurity', 'OnlineBackup','DeviceProtection',
+ 'TechSupport', 'StreamingTV', 'StreamingMovies'
+* drop the drop the customerID column
+
+By default, the preprocessed file will also be saved to the `data` folder.
 
 ```bash
 docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn preprocess
@@ -153,11 +166,23 @@ docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn prepro
 
 #### 5.4 Featurize the preprocessed data
 
+The following bash command will featurize the preprocessed data and save the featurized data in the `data` folder by default. 
+
+* encode binary response variable and binary feature
+* one-hot encode multi-category features
+
 ```bash
 docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn feature
 ```
 
-#### 5.5 Conduct Exploratory Data Analysis
+#### 5.5 Conduct Exploratory Data Analysis (EDA)
+
+The following command will conduct exploratory data analysis including:
+* correlation heatmap among variables
+* summary statistics for each variable
+* histograms of predictors colored by the whether the customer is churned or not
+
+By default, EDA results will be saved in the `models` folder.
 
 ```bash
 docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn eda
@@ -165,51 +190,82 @@ docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn eda
 
 #### 5.6 Train a random forest model
 
+The next step in the model pipeline is to train a random forest model using the featurized data. The following command 
+will conduct 
+* train-test split
+* build a random forest model on the training set
+* make predictions on the test set
+* calculate and visualize feature importance. 
+
+By default, all these output files will be saved in the `models` folder.
+
 ```bash
 docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn random_forest
 ```
 
 #### 5.6 Evaluate model performance
 
+The final step in the model pipeline is to evaluate model performance. The following bash command will 
+* calculate the AUC and Accuracy
+* create a confusion matrix
+* generate classification report
+
+By default, all these model evaluation metrics will be saved in the `models` folder.
+
 ```bash
 docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn evaluate
 ```
 
-### 6. Running the customer churn predictor app
+### 6 Testing
 
-To run the customer churn predictor app, you first need to create either a local SQLite database or an AWS RDS database
-in order to store user inputs. If you choose to use AWS RDS database, please make sure your have entered your AWS
-credentials and update RDS configurations before building the Docker container. If not, please update these configurations
-following instructions in section 2, and then rebuild the Docker container.
+#### 6.1 Reproducibility tests
 
-```bash
-#################################
-# Option 1: local SQLite database
-#################################
-docker run --mount type=bind,source="$(pwd)",target=/app/ customer_churn create_db
-docker run --mount type=bind,source="$(pwd)",target=/app/ customer_churn initial_ingest
-
-#################################
-# Option 2: AWS RDS database
-#################################
-docker run --env-file=config/.env customer_churn create_db
-docker run --env-file=config/.env customer_churn initial_ingest
-```
-
-After you set up the database, run the following bash command to activate the app. By default, the app will be running 
-on a local host at http://0.0.0.0:5000/. You can press CTRL+C to quit.
+To conduct reproducibility test, run the following bash command. The reproducibility test will test output files generated
+during each stage the of model development against the expected output saved at `test/reproducibility_true/`.
 
 ```bash
-source config/.env # if you want to use AWS RDS database
-python3 app.py
+docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn reproducibility_test
 ```
+
+#### 6.2 Unit tests
+
+The unit testing module test 5 functions to clean features and select the response variable. Each function will be tested
+twice - once with valid input and once with invalid input. This leads to a total of 10 tests. To conduct the unit tests,
+run the following bash command.
+
+```bash
+docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn unit_test
+```
+
+### 7. Running the customer churn predictor app
+
+To run the customer churn predictor app, you need to create either a local SQLite database or an AWS RDS database
+in order to store user inputs. 
+
+If you choose to use AWS RDS database, please enter your AWS credentials `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` 
+and RDS configurations `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_HOST`, `MYSQL_PORT`, and `DATABASE_NAME` in `config/.aws`,
+by running the following bash command:
+
+```bash
+vi config/.aws
+```
+
+Note: type `i` to enter the insert mode to make changes to the file. After finishing editing, press `ESC` to exit and 
+type `:wq` to save the change.
+
+To run the app, enter the following bash command.
+
+```bash
+source config/.aws # only if you want to use AWS RDS databse
+sh app/boot.sh
+```
+
+By default, a table named customer will be created in the database of your choice and  will be initially ingested with 5 
+records. The app will be running on a local host at http://0.0.0.0:5000/. You can press CTRL+C at any time to quit.
+
 
 ####################################################################
 
-### 4. Download data from Kaggle 
-
-The data can be directly downloaded from `https://www.kaggle.com/blastchar/telco-customer-churn`. For your convenience,
-the downloaded dataset `raw_data.csv` is located in the `data` folder.
 
 ### 5. Upload data to a S3 bucket
 
@@ -222,26 +278,6 @@ docker run --env-file=config/.awsconfig customer_churn run.py upload_data --buck
 By default, it will upload `data/raw_data.csv` to the `data` folder in `<YOUR_BUCKET_NAME>`
 
 ### 6. Initialize the database to store user input
-
-#### (a) Set up SQLite database locally
-
-To create the database locally using SQLite, run: 
-    
-```bash
-docker run --mount type=bind,source="$(pwd)"/data,target=/app/data customer_churn run.py create_db --rds=False
-```
-
-By default, this will set up a table `customer` in the SQLite database instance `data/customer.db` .
-
-#### (b) Set up Amazon AWS RDS 
-
-To create the database in Amazon AWS RDS, run:
-
-```bash
-docker run --env-file=config/.mysqlconfig --env-file=config/.awsconfig customer_churn run.py create_db --rds=True
-```
-    
-By default, this will create a table named `customer` within the  RDS <DATABASE_NAME> you specified in `flaskconfig.py`.
 
 #### (c) Access the default RDS database
 
