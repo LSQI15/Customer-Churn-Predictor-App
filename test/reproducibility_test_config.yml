@@ -1,29 +1,29 @@
 raw:
-  true_dir: test/true/
+  true_dir: test/reproducibility_true/
   test_dir: data/
   files_to_compare:
     - raw.csv
 
 preprocess:
-  true_dir: test/true/
+  true_dir: test/reproducibility_true/
   test_dir: data/
   files_to_compare:
     - preprocessed.csv
 
 featurize:
-  true_dir: test/true/
+  true_dir: test/reproducibility_true/
   test_dir: data/
   files_to_compare:
     - featurized.csv
 
 eda:
-  true_dir: test/true/
+  true_dir: test/reproducibility_true/
   test_dir: models/
   files_to_compare:
     - summary_statistics.csv
 
 random_forest:
-  true_dir: test/true/
+  true_dir: test/reproducibility_true/
   test_dir: models/
   files_to_compare:
     - X_train.csv
@@ -34,7 +34,7 @@ random_forest:
     - feature_importance.csv
 
 evaluate:
-  true_dir: test/true/
+  true_dir: test/reproducibility_true/
   test_dir: models/
   files_to_compare:
     - evaluation_auc_accuracy.csv
