@@ -5,7 +5,7 @@ logger = logging.getLogger("down_load_data")
 
 def upload_data(args):
     """
-    function to data in the local folder to a S3 bucket of user's choice
+    function to upload a data file in the local folder to a S3 bucket of user's choice
     :param args: The name of S3 bucket which data will be uploaded to
         local_file_path: path to the saved file
         file_name: the name of the file
@@ -33,7 +33,7 @@ def download_data(args):
 
 def data_downloader(bucket_name, s3_file, file_path, file_name):
     """
-    Helper function to data from a S3 bucket to the local folder based on user input
+    Helper function to download data from a S3 bucket to the local folder based on user input
     :param bucket_name: name of the S3 bucket; default bucket is
     :param s3_file: name of the file to be downloaded
     :param file_path: path to the saved file
