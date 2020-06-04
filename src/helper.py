@@ -15,7 +15,7 @@ def csv_reader(file_path, file_name):
     file_loc = file_path + '/' + file_name
     try:
         mydata = pd.read_csv(file_loc)
-        logger.info("Load file from %s", file_loc)
+        logger.info("File %s has been loaded.", file_loc)
         return mydata
     except:
         logger.error("Error: unable to load file %s", file_loc)
@@ -81,7 +81,8 @@ def featurize(df):
     try:
         # encode binary columns with 1,0
         new_df = df.replace({"Yes": 1, "No": 0, 'Male': 1, 'Female': 0})
-        # one-hot encode multi-category columns
+        # one-hot encode multi-category columns (with the same encoding as the one obtained by using
+        # pd.get_dummies() function in featurize.py
         new_df['MultipleLines_No phone service'] = np.where(df['MultipleLines'] == 'No phone service', 1, 0)
         new_df['MultipleLines_Yes'] = np.where(df['MultipleLines'] == 'Yes', 1, 0)
         new_df['InternetService_Fiber optic'] = np.where(df['InternetService'] == 'Fiber optic', 1, 0)
