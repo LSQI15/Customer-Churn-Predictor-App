@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 from sklearn.preprocessing import LabelEncoder
 from src.helper import csv_reader, df_to_csv
 
+
 def feaurize(args):
     """
     main function to preprocess/clean the raw data
@@ -30,7 +31,7 @@ def feaurize(args):
         multi_cols = [i for i in cat_features if i not in bi_cols]
         df = pd.get_dummies(data=df, columns=multi_cols, drop_first=True)
         logger.info("Multi-category columns have been encoded.")
-        # export featurized file to csv
+        # export featurized data to csv
         df_to_csv(df, **config['run_featurize_data']['save_csv'])
     except:
         logger.error("Error: unable to featurize the preprocessed data")
