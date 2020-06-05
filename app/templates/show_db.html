@@ -2,34 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link href="static/basic.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <style>
+        body {
+            font-family: 'Roboto';
+            font-size: 15px;
+            margin: 15px
+        }
+
+        h1 {
+            background-color: burlywood;
+        }
+
+        table.dataframe, table, .dataframe th, .dataframe td {
+            border: none;
+            width: 500px;
+            height: 200px;
+            border-bottom: 1px solid #C8C8C8;
+            border-collapse: collapse;
+            text-align: left;
+            padding: 10px;
+            margin-bottom: 40px;
+            font-size: 0.9em;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #eee;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fff;
+        }
+
+        tr:hover {
+            background-color: #ffff99;
+        }
+    </style>
 </head>
 
 <body>
-    <h3>
-         <a href = "{{ url_for('home') }}">Customer Churn Predictor</a>
-    </h3>
+<h4>MSiA-423 Spring 2020</h4>
+<h4>Siqi Li</h4>
+<h4><a href="{{ url_for('home') }}">Customer Churn Predictor</a></h4>
+{#<hr/>#}
+<center><h1>Customer Churn Database</h1></center>
 
-    <hr/>
-    <table>
-         <thead>
-            <tr>
-               <th>Customer_ID</th>
-               <th>Predicted_Probability</th>
-               <th>Predicted_Outcome</th>
-            </tr>
-         </thead>
+<table>
+    <thead>
+    <tr>
+        <th>Customer_ID</th>
+        <th>Predicted_Probability</th>
+        <th>Predicted_Outcome</th>
+    </tr>
+    </thead>
 
-         <tbody>
-            {% for customer in customers %}
-               <tr>
-                   <td>{{ customer.id }}</td>
-                   <td>{{ customer.PredProbability}}</td>
-                   <td>{{ customer.PredClass }}</td>
-               </tr>
-            {% endfor %}
-         </tbody>
-      </table>
+    <tbody>
+    {% for customer in customers %}
+        <tr>
+            <td>{{ customer.id }}</td>
+            <td>{{ customer.PredProbability }}</td>
+            <td>{{ customer.PredClass }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 
 </body>
 </html>
