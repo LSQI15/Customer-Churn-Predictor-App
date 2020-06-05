@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Customer Churn Prediction</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
     <style>
         body {
             font-family: 'Roboto';
+            margin: 15px
         }
 
         h1 {
@@ -56,10 +58,10 @@
 <div class="login">
     <h4>MSiA-423 Spring 2020</h4>
     <h4>Siqi Li</h4>
-    <h3><a href="{{ url_for('database') }}" style="color: dodgerblue">Customer Churn Database</a></h3>
+    <h4><a href="{{ url_for('database') }}" style="color: dodgerblue">Customer Churn Database</a></h4>
     <center><h1>Customer Churn Predictor</h1></center>
 
-    <h2>Will a customer stay or churn?</h2>
+    <h3>Will a customer stay or churn?</h3>
     <p style="background-color: white;">Please complete the following information and click on Predict to make a
         prediction</p>
 
@@ -154,19 +156,22 @@
 
     </form>
 
-
-    <h2>Prediction Result</h2>
-
+    <h3>Prediction Result</h3>
     {{ prediction_text }}<br><br>
-    {{ rec }}<br><br>
+    <div class="container">
+        <div class="progress">
+            <div class="{{ progress_bar_class }}" role="progressbar" aria-valuenow={{ proba }} aria-valuemin="0"
+                 aria-valuemax="1"
+                 style="width:{{ proba * 100 }}%">
+                {{ proba }}
+            </div>
+        </div>
+    </div>
+    <h3>Suggested Offer</h3>
+    {{ rec }}
+    <h3>Characteristics Analyzed</h3>
     <center>{{ tables|safe }}</center>
-
-
-    {#  <br>#}
-    {#  <br>#}
-    {#  <input type="image" src= {{url_2}} alt="Submit Form" height="130" width="750" onerror="this.style.display='none'"/>#}
 
 </div>
 
-</body>
 </html>
