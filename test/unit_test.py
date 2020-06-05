@@ -1,15 +1,16 @@
 import pytest
 import pandas as pd
+
 pd.options.mode.chained_assignment = None
 
 from src.data_preprocess import TotalCharges_processor, SeniorCitizen_processor, No_internet_service_converter, \
     drop_customerID
 from src.model_training import choose_target
 
-
 """
 test drop_customerID(df) function
 """
+
 
 def test_drop_customerID_valid_input():
     """
@@ -86,7 +87,8 @@ def test_SeniorCitizen_processor_valid_input():
     # happy path:
     # test whether the feature column generated is the same as the expected column
     expected = preprocessed['SeniorCitizen'].reset_index(drop=True)
-    raw_dropna = TotalCharges_processor(raw)  # need to add this intermediate step as it drops na so dimension of the two data frames can match and thus can be compared
+    raw_dropna = TotalCharges_processor(
+        raw)  # need to add this intermediate step as it drops na so dimension of the two data frames can match and thus can be compared
     happy_out = SeniorCitizen_processor(raw_dropna)['SeniorCitizen'].reset_index(drop=True)
     assert expected.equals(happy_out)
 
@@ -121,7 +123,8 @@ def test_No_internet_service_converter_valid_input():
     # test whether the feature columns generated are the same as the expected columns
     cols = ['OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies']
     expected = preprocessed[cols].reset_index(drop=True)
-    raw_dropna = TotalCharges_processor(raw)  # need to add this intermediate step as it drops na so dimension of the two data frames can match and thus can be compared
+    raw_dropna = TotalCharges_processor(
+        raw)  # need to add this intermediate step as it drops na so dimension of the two data frames can match and thus can be compared
     happy_out = No_internet_service_converter(raw_dropna, cols)[cols].reset_index(drop=True)
     assert expected.equals(happy_out)
 
