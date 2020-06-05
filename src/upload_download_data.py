@@ -1,7 +1,9 @@
 import boto3
 import yaml
 import logging
+
 logger = logging.getLogger("down_load_data")
+
 
 def upload_data(args):
     """
@@ -47,4 +49,3 @@ def data_downloader(bucket_name, s3_file, file_path, file_name):
         logger.info("%s is downloaded from S3 bucket %s to %s " % (s3_file, bucket_name, path))
     except:
         logger.error("Error: Unable to download %s from S3 bucket %s" % (s3_file, bucket_name))
-

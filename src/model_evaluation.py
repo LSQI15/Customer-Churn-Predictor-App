@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 from src.helper import csv_reader
 
+
 def auc_accuracy_processor(y_test, pred_prob, pred_class, file_path, file_name):
     """
     helper function to calculate the auc and accuracy of predictions
@@ -91,7 +92,8 @@ def evaluate_model(args):
         # generate confusion matrix
         confusion_matrix_processor(y_test, pred_class, **config['run_model_evaluator']['confusion_matrix_processor'])
         # generate classification report
-        classification_report_processor(y_test, pred_class, **config['run_model_evaluator']['classification_report_processor'])
+        classification_report_processor(y_test, pred_class,
+                                        **config['run_model_evaluator']['classification_report_processor'])
         # generate feature importance
     except:
         logger.error("Error: unable to calculate model evaluation metrics")

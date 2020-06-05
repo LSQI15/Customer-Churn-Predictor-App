@@ -2,6 +2,7 @@ import pickle
 import pandas as pd
 import logging
 import numpy as np
+
 logger = logging.getLogger(__name__)
 
 
@@ -44,7 +45,7 @@ def load_model(model_path, model_name):
     :return rf: the saved random forest model
     """
     try:
-        model_loc = model_path+'/'+model_name
+        model_loc = model_path + '/' + model_name
         with open(model_loc, 'rb') as f:
             rf = pickle.load(f)
         logger.info('Random forest model has been loaded from %s' % model_loc)
@@ -65,12 +66,13 @@ def churn_predictor(rf, df):
         pred_class = rf.predict(df)
         pred = pd.DataFrame({'PredProbability': pred_prob.round(10),
                              'PredClass': pred_class},
-                              columns=['PredProbability', 'PredClass'])
-        pred =pred.replace({'PredClass': {1: "Yes", 0: "No"}})
+                            columns=['PredProbability', 'PredClass'])
+        pred = pred.replace({'PredClass': {1: "Yes", 0: "No"}})
         logger.info("Prediction(s) have been combined into a pandas data frame.")
         return pred
     except:
         logger.error('Error: unable to make predictions for the input data frame.')
+
 
 def featurize(df):
     """
@@ -90,7 +92,8 @@ def featurize(df):
         new_df['InternetService_No'] = np.where(df['InternetService'] == 'No', 1, 0)
         new_df['Contract_One year'] = np.where(df['Contract'] == 'One year', 1, 0)
         new_df['Contract_Two year'] = np.where(df['Contract'] == 'Two year', 1, 0)
-        new_df['PaymentMethod_Credit card (automatic)'] = np.where(df['PaymentMethod'] == 'Credit card (automatic)', 1, 0)
+        new_df['PaymentMethod_Credit card (automatic)'] = np.where(df['PaymentMethod'] == 'Credit card (automatic)', 1,
+                                                                   0)
         new_df['PaymentMethod_Electronic check'] = np.where(df['PaymentMethod'] == 'Electronic check', 1, 0)
         new_df['PaymentMethod_Mailed check'] = np.where(df['PaymentMethod'] == 'Mailed check', 1, 0)
         # drop multi-category columns that have been one-hot encoded.

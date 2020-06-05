@@ -2,6 +2,7 @@ import yaml
 import numpy as np
 import pandas as pd
 import logging
+
 logger = logging.getLogger(__name__)
 
 from sklearn.preprocessing import LabelEncoder

@@ -4,6 +4,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import logging
+
 logger = logging.getLogger(__name__)
 
 from src.helper import csv_reader, df_to_csv
@@ -89,5 +90,3 @@ def histogram_maker(df, target_col, file_path):
         logger.info("All histograms have been created.")
     except:
         logger.error("Error: unable to create histogram(s).")
-
-
