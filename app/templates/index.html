@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: 'Roboto';
-            margin: 15px
+            margin:15px
         }
 
         h1 {
@@ -156,13 +156,13 @@
 
     </form>
 
+
     <h3>Prediction Result</h3>
     {{ prediction_text }}<br><br>
     <div class="container">
         <div class="progress">
-            <div class="{{ progress_bar_class }}" role="progressbar" aria-valuenow={{ proba }} aria-valuemin="0"
-                 aria-valuemax="1"
-                 style="width:{{ proba * 100 }}%">
+            <div class="{{progress_bar_class}}" role="progressbar" aria-valuenow={{ proba }} aria-valuemin="0" aria-valuemax="1"
+                 style="width:{{percent}}%">
                 {{ proba }}
             </div>
         </div>
@@ -173,5 +173,7 @@
     <center>{{ tables|safe }}</center>
 
 </div>
+
+</body>
 
 </html>

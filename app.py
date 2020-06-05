@@ -190,11 +190,11 @@ def predict():
     return render_template('index.html',
                            tables=user_input_str,
                            proba=round(output, 5),
+                           percent=100*output,
                            progress_bar_class=progress_bar_class,
                            rec=recommendation,
                            prediction_text='Based on input values, the random forest model predicts that the '
-                                           'probability this customer will churn is: {}'.format(
-                               round(output, 5)))
+                                           'probability this customer will churn is: {}'.format(round(output, 5)))
 
 
 if __name__ == '__main__':
