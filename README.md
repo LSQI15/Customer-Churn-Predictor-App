@@ -264,6 +264,17 @@ By default, a table named customer will be created in the database of your choic
 records. The app will be running on a local host at http://0.0.0.0:5000/. You can press CTRL+C at any time to quit.
 
 
+### 8 Terminate Docker Container
+
+After using the app, please enter the following bash command to stop the Docker container
+
+```bash
+docker kill customer_churn
+docker rm customer_churn
+```
+
+
+
 ####################################################################
 
 
@@ -299,14 +310,27 @@ describe customer;
 
 **Vision**:
 
-Customer attrition refers to the loss of customers by a business. No matter whether a customer is a one-time purchaser or a loyal program member, customers will eventually churn and not remain active indefinitely. The loss of customers is undesirable, as in most of the cases, the cost to retain a customer is lower than that to acquire a new customer. Companies in various industries such as telecom companies, insurance companies and restaurants often analyze customer attrition to get a deeper insight into the churn. This project specifically aims to help a telecom company make reliable predictions for customer churn so that the company can implement remedial actions for customer retention.
+Customer attrition refers to the loss of customers by a business. No matter whether a customer is a one-time purchaser 
+or a loyal program member, customers will eventually churn and not remain active indefinitely. The loss of customers is 
+undesirable, as in most of the cases, the cost to retain a customer is lower than that to acquire a new customer. 
+Companies in various industries such as telecom companies, insurance companies and restaurants often analyze customer 
+attrition to get a deeper insight into the churn. This project specifically aims to help a telecom company make reliable
+ predictions for customer churn so that the company can implement remedial actions for customer retention.
 
 
 **Mission**:
 
-This project uses the *Telco customer churn data* compiled by BlastChar on Kaggle.com (https://www.kaggle.com/blastchar/telco-customer-churn). This data set contains information about a telecom company which provides services to 7,043 customers in California. For each customer, it has the binary indicator of whether a customer has churned, along with several demographic predictors such as gender and service predictors such as the monthly payment. The dimension of the dataset is 7,043 rows by 21 columns.
+This project uses the *Telco customer churn data* compiled by BlastChar on Kaggle.com (https://www.kaggle.com/blastchar/telco-customer-churn). 
+This data set contains information about a telecom company which provides services to 7,043 customers in California. 
+For each customer, it has the binary indicator of whether a customer has churned, along with several demographic 
+predictors such as gender and service predictors such as the monthly payment. The dimension of the dataset is 7,043 
+rows by 21 columns.
 
-This project enables business stakeholders at the telecom company to predict whether a given customer will churn and get the associated predicted probability of churn by entering parameters such as the customer’s gender, contract term, and monthly charge. Based on the predicted results, business stakeholders can then implement plans to retain customers who are likely to churn. The prediction is based on a supervised machine learning model trained and validated on historical customer attrition data.
+This project enables business stakeholders at the telecom company to predict whether a given customer will churn and get
+ the associated predicted probability of churn by entering parameters such as the customer’s gender, contract term, and 
+ monthly charge. Based on the predicted results, business stakeholders can then implement plans to retain customers who 
+ are likely to churn. The prediction is based on a supervised machine learning model trained and validated on historical
+  customer attrition data.
 
 **Success criteria**:
 
@@ -318,7 +342,9 @@ This project enables business stakeholders at the telecom company to predict whe
 
 **Main Initiative**:
 
-Deploy a machine learning model to help business stakeholders identify customers who are likely to churn. By applying this model, business stakeholders can take remedial actions for customer retention in advance and ultimately decrease the customer attrition rate.
+Deploy a machine learning model to help business stakeholders identify customers who are likely to churn. By applying 
+this model, business stakeholders can take remedial actions for customer retention in advance and ultimately decrease 
+the customer attrition rate.
 
 **Initiative 1: Data Manipulation & Exploratory Data Analysis**
 
@@ -337,11 +363,10 @@ Deploy a machine learning model to help business stakeholders identify customers
 1.	Model building 
     *	Split data into the training set and the test set (0 points)
     *	Build a logistic regression model as the baseline model (1 point)
-    *	Train random forest models with grid search to figure out the optimal parameter combination (4 points)
-    *	Train XGBoost models with grid search to figure out the optimal parameter combination (4 points)
+    *	Train random forest models (4 points)
     *	Export variable importance and derive useful insights if any (2 points)
 2.	Model evaluation
-    *	Apply 10-fold cross-validation to evaluate the model performance (random forest vs. XGBoost) based on metrics such as correct classification rate and F-1 score. (2 points)
+    *	Evaluate the model performance based on metrics such as correct classification rate and F-1 score. (2 points)
     *	Pick the best model based on performance metrics (0 points)
 
 **Initiative 3: Product Development**
@@ -361,7 +386,9 @@ Deploy a machine learning model to help business stakeholders identify customers
 1.	Upload raw data to a S3 bucket
 2.	Deploy model with Flask
 3.	Design interactive user interface
-*	Basically, need to learn more about RD3, S3, Docker and Flask (what they are, how they work together, and how to use them) in order to success complete the project and achieve the desired outcome; but as the quarter progresses, these road blocker will be tackled one by one.
+*	Basically, need to learn more about RD3, S3, Docker and Flask (what they are, how they work together, and how to use
+ them) in order to success complete the project and achieve the desired outcome; but as the quarter progresses, these 
+ road blocker will be tackled one by one.
 
 
 
