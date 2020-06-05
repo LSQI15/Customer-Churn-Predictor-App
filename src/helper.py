@@ -74,8 +74,9 @@ def churn_predictor(rf, df):
 
 def featurize(df):
     """
-    helper function to convert a data frame storing preprocessed data to a featurized data frame for making predictions
-    :param df: a data frame storing preprocessed data
+    helper function to featurize user inputs for the model to make predictions; web app has measures to make sure user
+    inputs are valid before he/she submit the online prediction request
+    :param df: a data frame storing inputs entered by the user
     :return: a featurized dara frame for the random forest model to make predictions
     """
     try:
@@ -97,7 +98,8 @@ def featurize(df):
         logger.info('Preprocessed df has been featurized.')
         return new_df
     except:
-        logger.error('Error: unable to featurize the preprocessed df.')
+        logger.error('Error: unable to featurize the preprocessed df. One or more multi-categorical variable(s) '
+                     'is missing')
 
 
 def make_ingest_df(rf, df):
