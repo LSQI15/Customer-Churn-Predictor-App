@@ -169,19 +169,31 @@ def predict():
     ingest_db(ingest_df, db.get_engine())
     logger.info('User input and the corresponding predictions haven been added to the database.')
 
+    # process outputs necessary for rendering the html file
     user_input_str = preprocessed_df.T.reset_index().rename(columns={'index': 'Features', 0: 'Values'}).to_html()
-
+    # different suggested offer for different predicted probability
     if output > 0.75:
-        recommendation = 'This customer has a high risk of churning. The recommended offer is to lower fees for 6 months.'
+        progress_bar_class = "progress-bar progress-bar-danger"
+        recommendation = 'This customer has a high risk of churning. The recommended offer is to lower fees for 6 ' \
+                         'months.'
     elif output > 0.50:
-        recommendation = 'This customer has a moderate risk of churning. The recommended offer is to lower fees for 3 months.'
+        progress_bar_class = "progress-bar progress-bar-warning"
+        recommendation = 'This customer has a moderate risk of churning. The recommended offer is to lower fees for 3' \
+                         ' months.'
     elif output > 0.25:
+        progress_bar_class = "progress-bar progress-bar-info"
         recommendation = 'This customer has a low risk of churning. The recommended offer is to lower fees for 1 month.'
     else:
+        progress_bar_class = "progress-bar progress-bar-success"
         recommendation = 'This customer is not at risk. No action is needed.'
 
-    return render_template('index.html', tables=user_input_str, rec=recommendation,
-                           prediction_text='Based on the following input values, the probability that this customer will churn is: {}'.format(
+    return render_template('index.html',
+                           tables=user_input_str,
+                           proba=round(output, 5),
+                           progress_bar_class=progress_bar_class,
+                           rec=recommendation,
+                           prediction_text='Based on input values, the random forest model predicts that the '
+                                           'probability this customer will churn is: {}'.format(
                                round(output, 5)))
 
 
