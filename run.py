@@ -14,6 +14,7 @@ from src.model_training import random_forest
 from src.model_evaluation import evaluate_model
 from config.flaskconfig import SQLALCHEMY_DATABASE_URI
 from src.customer_db import create_db, initial_ingest
+from test.reproducibility_test import run_reproducibility_tests
 
 
 if __name__ == '__main__':
@@ -58,12 +59,18 @@ if __name__ == '__main__':
                            help="SQLAlchemy connection URI for database")
     sb_create_db.set_defaults(func=create_db)
 
-    # Sub-parser for conducting initial ingestion to the databse
+    # Sub-parser for conducting initial ingestion to the database
     sb_init_ingest = subparsers.add_parser("initial_ingest", description="Initial ingestion to the Databse")
     sb_init_ingest.add_argument("--engine_string", default=SQLALCHEMY_DATABASE_URI,
                               help="SQLAlchemy connection URI for database")
     sb_init_ingest.add_argument('--config', help='path to yaml file with configurations')
+    sb_init_ingest.add_argument('--num_records', default=5, help='the number of records to ingest')
     sb_init_ingest.set_defaults(func=initial_ingest)
+
+    # Sub-parser for conducting reproducibility test
+    sb_reproducibility_test = subparsers.add_parser("run_reproducibility_tests", description="Run reproducibility tests")
+    sb_reproducibility_test.add_argument('--config', help='path to yaml file with configurations')
+    sb_reproducibility_test.set_defaults(func=run_reproducibility_tests)
 
     # Sub-parser for uploading the data to S3 bucket
     sb_upload = subparsers.add_parser("upload_data", description="Upload data into S3")
