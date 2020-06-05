@@ -46,7 +46,7 @@ def TotalCharges_processor(df):
         logger.info("NaN values in TotalCharges column ha been dropped.")
         return processed_df
     except:
-        logger.error('Error: unable to clean column TotalCharges.')
+        logger.error('Error: unable to clean column TotalCharges. TotalCharges is not in the input data frame.')
         raise KeyError("TotalCharges is not in the input data frame.")
 
 
@@ -62,7 +62,7 @@ def SeniorCitizen_processor(df):
         logger.info("Binary values in SeniorCitizen column have been replaced with Yes/No")
         return processed_df
     except:
-        logger.error('Error: unable to clean column SeniorCitizen.')
+        logger.error('Error: unable to clean column SeniorCitizen. SeniorCitizen is not in the input data frame.')
         raise KeyError("SeniorCitizen is not in the input data frame.")
 
 
@@ -80,7 +80,7 @@ def No_internet_service_converter(df, cols):
             processed_df[i] = processed_df[i].replace({'No internet service': 'No'})
             logger.info("\"No internet service\" have been replaced with No in column %s" % i)
         except:
-            logger.error('Error: unable to clean column %s.' % i)
+            logger.error('Error: unable to clean column %s.' % i + "%s is not in the input data frame." % i)
             raise KeyError("%s is not in the input data frame." % i)
     return processed_df
 
@@ -97,5 +97,5 @@ def drop_customerID(df):
         logger.info("customerID column has been dropped")
         return processed_df
     except:
-        logger.error('Error: unable to drop column customerID.')
+        logger.error('Error: unable to drop column customerID. customerID is not in the input data frame.')
         raise KeyError("customerID is not in the input data frame.")
