@@ -25,10 +25,10 @@ def run_reproducibility_tests(args=None, config_path=None):
         true_dir, test_dir = testconf["true_dir"], testconf["test_dir"]
         files_to_compare = [f for f in testconf["files_to_compare"] if f.split('.')[-1] not in dict_file_types]
         match, mismatch, errors = filecmp.cmpfiles(true_dir, test_dir, files_to_compare, shallow=True)
-
-        if len(mismatch) > 0:
-            logger.warning("%s file(s) does not match, reproducibility test of model pipeline step \'%s\': FAILED" % (
-            ", ".join(mismatch), test))
+        # if there is a mismatch or no file is match, reproducibility test is failed
+        if len(mismatch) > 0 or len(match) == 0:
+            logger.error("%s file(s) does not match, reproducibility test of model pipeline step \'%s\': FAILED" % (
+                ", ".join(mismatch), test))
             all_passed = False
         else:
             logger.info("Reproducibility test of model pipeline stage \'%s\': PASSED" % test)
