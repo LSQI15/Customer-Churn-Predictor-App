@@ -15,22 +15,20 @@ def eda(args):
     main function to conduct exploratory data analysis EDA
     :param
     args.config: path to configuration file
-    args.in_file_path_preprocessed: path to the input preprocessed data
-    args.in_file_name_preprocessed: name of the preprocessed data
-    args.in_file_path_featurized: path to the input feaurized data
-    args.in_file_name_featurized: name of the input feaurized data
-    args.out_file_path: path to EDA output files
+    args.in_file_preprocessed: path to the input preprocessed data
+    args.in_file_featurized: path to the input feaurized data
+    args.out_file_path: the directory of EDA output files
     """
     with open(args.config, "r") as f:
         config = yaml.load(f, Loader=yaml.SafeLoader)
     # read featurized data
-    df = csv_reader(args.in_file_path_featurized, args.in_file_name_featurized)
+    df = csv_reader(args.in_file_featurized)
     # summary statistics:
     summary_maker(df, args.out_file_path, **config['run_eda']['summary_stats'])
     # correlation heatmap:
     heatmap_maker(df, args.out_file_path, **config['run_eda']['heatmap'])
     # histograms by churn/not churn
-    preprocessed_df = csv_reader(args.in_file_path_preprocessed, args.in_file_name_preprocessed)
+    preprocessed_df = csv_reader(args.in_file_preprocessed)
     histogram_maker(preprocessed_df, args.out_file_path, **config['run_eda']['histogram'])
 
 
@@ -43,7 +41,7 @@ def summary_maker(df, file_path, file_name):
     """
     try:
         statistics = df.describe().transpose().reset_index().rename(columns={"index": "feature"})
-        df_to_csv(statistics, file_path, file_name)
+        df_to_csv(statistics, file_path+'/'+file_name)
         logger.info('Summary statistics has been calculated and saved as a .csv file')
     except:
         logger.error("Error: unable to generate a summary statistics table")

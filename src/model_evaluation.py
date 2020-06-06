@@ -77,14 +77,13 @@ def evaluate_model(args):
     :param
     args.config: path to configuration file
     args.in_file_path: path to the input model prediction data
-    args.in_file_name: name of the input model prediction data
-    args.out_file_path: path to model-related output files
+    args.out_file_path: the directory of model-related output files
     """
     with open(args.config, "r") as f:
         config = yaml.load(f, Loader=yaml.SafeLoader)
     try:
         # read data
-        pred = csv_reader(args.in_file_path, args.in_file_name)
+        pred = csv_reader(args.in_file_path)
         logger.info("Prediction results for model evaluation has been loaded.")
         # parse the data
         y_test = pred.y_test

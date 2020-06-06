@@ -9,21 +9,19 @@ from sklearn.preprocessing import LabelEncoder
 from src.helper import csv_reader, df_to_csv
 
 
-def feaurize(args):
+def featurize(args):
     """
     main function to preprocess/clean the raw data
     :param
     args.config: path to configuration file
     args.in_file_path: path to the preprocessed data
-    args.in_file_name: name of the preprocessed data
     args.out_file_path: path to the feaurized data
-    args.out_file_name: name of the feaurized data
     """
     try:
         with open(args.config, "r") as f:
             config = yaml.load(f, Loader=yaml.SafeLoader)
         # read preprocessed data
-        df = csv_reader(args.in_file_path, args.in_file_name)
+        df = csv_reader(args.in_file_path)
         features = df.drop("Churn", axis=1)
         logger.info("Preprocessed data has been loaded.")
         # encode binary columns (features+target)
@@ -38,6 +36,6 @@ def feaurize(args):
         df = pd.get_dummies(data=df, columns=multi_cols, drop_first=True)
         logger.info("Multi-category columns have been encoded.")
         # export featurized data to csv
-        df_to_csv(df, args.out_file_path, args.out_file_name)
+        df_to_csv(df, args.out_file_path)
     except:
         logger.error("Error: unable to featurize the preprocessed data")

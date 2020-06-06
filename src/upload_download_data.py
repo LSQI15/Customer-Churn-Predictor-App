@@ -29,26 +29,23 @@ def download_data(args):
     :param args (argparse):
         args.config (path to yaml file with configurations)
         args.file_path (path to the saved data)
-        args.file_name (name of the saved data)
     """
     with open(args.config, "r") as f:
         config = yaml.load(f, Loader=yaml.SafeLoader)
-    data_downloader(args.file_path, args.file_name, **config['run_download_data']['download_data'])
+    data_downloader(args.file_path, **config['run_download_data']['download_data'])
 
 
-def data_downloader(file_path, file_name, bucket_name, s3_file):
+def data_downloader(file_path, bucket_name, s3_file):
     """
     Helper function to download data from a S3 bucket to the local folder based on user input
     :param file_path: path to the saved file
-    :param file_name: name of the saved file
     :param bucket_name: name of the S3 bucket; default bucket is
     :param s3_file: name of the file to be downloaded
     :return: None
     """
     try:
-        path = file_path + '/' + file_name
         s3 = boto3.client('s3')
-        s3.download_file(bucket_name, s3_file, path)
-        logger.info("%s is downloaded from S3 bucket %s to %s " % (s3_file, bucket_name, path))
+        s3.download_file(bucket_name, s3_file, file_path)
+        logger.info("%s is downloaded from S3 bucket %s to %s " % (s3_file, bucket_name, file_path))
     except:
         logger.error("Error: Unable to download %s from S3 bucket %s" % (s3_file, bucket_name))

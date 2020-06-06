@@ -8,7 +8,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 logger = logging.getLogger(__name__)
 
-from src.helper import csv_reader, df_to_csv
+from src.helper import csv_reader, df_to_csv,df_to_csv2
 
 
 def choose_target(data, target):
@@ -160,30 +160,29 @@ def random_forest(args):
     :param
     args.config: path to configuration file
     args.in_file_path: path to the input feaurized data
-    args.in_file_name: name of the input feaurized data
-    args.out_file_path: path to evaluation-related output files
+    args.out_file_path: the directory of evaluation-related output files
     """
     try:
         with open(args.config, "r") as f:
             config = yaml.load(f, Loader=yaml.SafeLoader)
         # read preprocessed data
-        df = csv_reader(args.in_file_path, args.in_file_name)
+        df = csv_reader(args.in_file_path)
         logger.info("Dataset for model training has been loaded.")
         # train/test split
         X_train, X_test, y_train, y_test = train_test_split(df, **config['run_randomForest']['train_test_split'])
-        df_to_csv(X_train, args.out_file_path, **config['run_randomForest']['X_train'])
-        df_to_csv(X_test, args.out_file_path, **config['run_randomForest']['X_test'])
-        df_to_csv(y_train.to_frame(), args.out_file_path, **config['run_randomForest']['y_train'])
-        df_to_csv(y_test.to_frame(), args.out_file_path, **config['run_randomForest']['y_test'])
+        df_to_csv2(X_train, args.out_file_path, **config['run_randomForest']['X_train'])
+        df_to_csv2(X_test, args.out_file_path, **config['run_randomForest']['X_test'])
+        df_to_csv2(y_train.to_frame(), args.out_file_path, **config['run_randomForest']['y_train'])
+        df_to_csv2(y_test.to_frame(), args.out_file_path, **config['run_randomForest']['y_test'])
         logger.info("Train set and test set have been exported as .csv files")
         # Model fitting
         rf = rf_trainer(X_train, y_train, args.out_file_path, **config['run_randomForest']['rf_to_local'])
         # prediction
         predictions = rf_predictor(rf, X_test, y_test)
-        df_to_csv(predictions, args.out_file_path, **config['run_randomForest']['predictions'])
+        df_to_csv2(predictions, args.out_file_path, **config['run_randomForest']['predictions'])
         # feature importance
         feat_import = rf_feature_importance(rf, **config['run_randomForest']['calculate_importance'])
-        df_to_csv(feat_import, args.out_file_path, **config['run_randomForest']['save_importance'])
+        df_to_csv2(feat_import, args.out_file_path, **config['run_randomForest']['save_importance'])
         rf_feature_importance_plot(feat_import, args.out_file_path, **config['run_randomForest']['plot_importance'])
     except:
         logger.error("Error: unable to run the random forest model.")
