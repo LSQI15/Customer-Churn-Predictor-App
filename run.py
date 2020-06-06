@@ -22,33 +22,54 @@ if __name__ == '__main__':
 
     # Sub-parser for downloading raw data from S3 bucket
     sb_download = subparsers.add_parser("download_data", description="Download data from S3 bucket")
-    sb_download.add_argument('--config', help='path to yaml file with configurations')
+    sb_download.add_argument('--file_path', default='data', help='path to the raw data')
+    sb_download.add_argument('--file_name', default='raw.csv', help='name of the raw data')
+    sb_download.add_argument('--config', default='config/config.yml', help='path to yaml file with configurations')
     sb_download.set_defaults(func=download_data)
 
     # Sub-parser for cleaning raw data
     sb_preprocess = subparsers.add_parser("preprocess_data", description="Clean the raw data")
-    sb_preprocess.add_argument('--config', help='path to yaml file with configurations')
+    sb_preprocess.add_argument('--in_file_path', default='data', help='path to the raw data')
+    sb_preprocess.add_argument('--in_file_name', default='raw.csv', help='name of the raw file')
+    sb_preprocess.add_argument('--out_file_path', default='data', help='path to the preprocessed data')
+    sb_preprocess.add_argument('--out_file_name', default='preprocessed.csv', help='name of the preprocessed data')
+    sb_preprocess.add_argument('--config', default='config/config.yml', help='path to yaml file with configurations')
     sb_preprocess.set_defaults(func=preprocess_data)
 
     # Sub-parser for featurizing preprocessed data
     sb_feature = subparsers.add_parser("feaurize", description="featurize the preprocessed data")
-    sb_feature.add_argument('--config', help='path to yaml file with configurations')
+    sb_feature.add_argument('--in_file_path', default='data', help='path to the preprocessed data')
+    sb_feature.add_argument('--in_file_name', default='preprocessed.csv', help='name of the preprocessed file')
+    sb_feature.add_argument('--out_file_path', default='data', help='path to the featurized data')
+    sb_feature.add_argument('--out_file_name', default='featurized.csv', help='name of the featurized data')
+    sb_feature.add_argument('--config', default='config/config.yml', help='path to yaml file with configurations')
     sb_feature.set_defaults(func=feaurize)
 
     # Sub-parser for exploratory data analysis
     sb_eda = subparsers.add_parser("eda", description="exploratory data analysis")
-    sb_eda.add_argument('--config', help='path to yaml file with configurations')
+    sb_eda.add_argument('--in_file_path_preprocessed', default='data', help='path to preprocessed data')
+    sb_eda.add_argument('--in_file_name_preprocessed', default='preprocessed.csv', help='name of the preprocessed data')
+    sb_eda.add_argument('--in_file_path_featurized', default='data', help='path to featurized data')
+    sb_eda.add_argument('--in_file_name_featurized', default='featurized.csv', help='name of the featurized data')
+    sb_eda.add_argument('--out_file_path', default='models', help='path to eda outputs')
+    sb_eda.add_argument('--config', default='config/config.yml', help='path to yaml file with configurations')
     sb_eda.set_defaults(func=eda)
 
     # Sub-parser for training random forest model
     sb_random_forest = subparsers.add_parser("random_forest", description="training random forest model")
-    sb_random_forest.add_argument('--config', help='path to yaml file with configurations')
+    sb_random_forest.add_argument('--in_file_path', default='data', help='path to the featurized data')
+    sb_random_forest.add_argument('--in_file_name', default='featurized.csv', help='name of the featurized data')
+    sb_random_forest.add_argument('--out_file_path', default='models', help='path to model-related outputs')
+    sb_random_forest.add_argument('--config', default='config/config.yml', help='path to yaml file with configurations')
     sb_random_forest.set_defaults(func=random_forest)
 
     # Sub-parser for evaluating the random forest model
     sb_eval = subparsers.add_parser("evaluate_model",
                                     description="evaluate the model and save evaluations in .csv files")
-    sb_eval.add_argument('--config', help='path to yaml file with configurations')
+    sb_eval.add_argument('--in_file_path', default='models', help='path to the model predictions file')
+    sb_eval.add_argument('--in_file_name', default='predictions.csv', help='name of the model predictions file')
+    sb_eval.add_argument('--out_file_path', default='models', help='path to evaluation-related outputs')
+    sb_eval.add_argument('--config', default='config/config.yml', help='path to yaml file with configurations')
     sb_eval.set_defaults(func=evaluate_model)
 
     # Sub-parser for creating a database to store user input
@@ -61,14 +82,15 @@ if __name__ == '__main__':
     sb_init_ingest = subparsers.add_parser("initial_ingest", description="Initial ingestion to the Databse")
     sb_init_ingest.add_argument("--engine_string", default=SQLALCHEMY_DATABASE_URI,
                                 help="SQLAlchemy connection URI for database")
-    sb_init_ingest.add_argument('--config', help='path to yaml file with configurations')
+    sb_init_ingest.add_argument('--config', default='config/config.yml', help='path to yaml file with configurations')
     sb_init_ingest.add_argument('--num_records', default=5, help='the number of records to ingest')
     sb_init_ingest.set_defaults(func=initial_ingest)
 
     # Sub-parser for conducting reproducibility test
     sb_reproducibility_test = subparsers.add_parser("run_reproducibility_tests",
                                                     description="Run reproducibility tests")
-    sb_reproducibility_test.add_argument('--config', help='path to yaml file with configurations')
+    sb_reproducibility_test.add_argument('--config', default='test/reproducibility_test_config.yml',
+                                         help='path to yaml file with configurations')
     sb_reproducibility_test.set_defaults(func=run_reproducibility_tests)
 
     # Sub-parser for uploading the data to S3 bucket
