@@ -11,17 +11,27 @@ from src.helper import csv_reader, df_to_csv
 
 
 def eda(args):
+    """
+    main function to conduct exploratory data analysis EDA
+    :param
+    args.config: path to configuration file
+    args.in_file_path_preprocessed: path to the input preprocessed data
+    args.in_file_name_preprocessed: name of the preprocessed data
+    args.in_file_path_featurized: path to the input feaurized data
+    args.in_file_name_featurized: name of the input feaurized data
+    args.out_file_path: path to EDA output files
+    """
     with open(args.config, "r") as f:
         config = yaml.load(f, Loader=yaml.SafeLoader)
-    # read preprocessed data
-    df = csv_reader(**config['run_eda']['read_csv'])
+    # read featurized data
+    df = csv_reader(args.in_file_path_featurized, args.in_file_name_featurized)
     # summary statistics:
-    summary_maker(df, **config['run_eda']['summary_stats'])
+    summary_maker(df, args.out_file_path, **config['run_eda']['summary_stats'])
     # correlation heatmap:
-    heatmap_maker(df, **config['run_eda']['heatmap'])
+    heatmap_maker(df, args.out_file_path, **config['run_eda']['heatmap'])
     # histograms by churn/not churn
-    preprocessed_df = csv_reader(**config['run_eda']['preprocessed'])
-    histogram_maker(preprocessed_df, **config['run_eda']['histogram'])
+    preprocessed_df = csv_reader(args.in_file_path_preprocessed, args.in_file_name_preprocessed)
+    histogram_maker(preprocessed_df, args.out_file_path, **config['run_eda']['histogram'])
 
 
 def summary_maker(df, file_path, file_name):
@@ -65,12 +75,12 @@ def heatmap_maker(df, file_path, file_name):
         logger.error("Error: unable to create a heatmap.")
 
 
-def histogram_maker(df, target_col, file_path):
+def histogram_maker(df, file_path, target_col):
     """
     helper function to create a histogram and save it locally
     :param df: a pandas data frame containing all features and the response variables
-    :param target_col: the name of the target column
     :param file_path: file path of the output files
+    :param target_col: the name of the target column
     """
     try:
         target = df[target_col]

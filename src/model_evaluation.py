@@ -74,13 +74,17 @@ def classification_report_processor(y_test, pred_class, file_path, file_name):
 def evaluate_model(args):
     """
     main function to evaluate model performance and calculate evaluation metrics
-    :param args (argparse): user-input configuration file
+    :param
+    args.config: path to configuration file
+    args.in_file_path: path to the input model prediction data
+    args.in_file_name: name of the input model prediction data
+    args.out_file_path: path to model-related output files
     """
     with open(args.config, "r") as f:
         config = yaml.load(f, Loader=yaml.SafeLoader)
     try:
         # read data
-        pred = csv_reader(**config['run_model_evaluator']['evaluate_model'])
+        pred = csv_reader(args.in_file_path, args.in_file_name)
         logger.info("Prediction results for model evaluation has been loaded.")
         # parse the data
         y_test = pred.y_test
@@ -88,12 +92,13 @@ def evaluate_model(args):
         pred_class = pred.pred_class
         logger.info("Prediction results for model evaluation has been parsed, and are ready for evaluation.")
         # calculate evaluation metrics
-        auc_accuracy_processor(y_test, pred_prob, pred_class, **config['run_model_evaluator']['auc_accuracy_processor'])
+        auc_accuracy_processor(y_test, pred_prob, pred_class, args.out_file_path,
+                               **config['run_model_evaluator']['auc_accuracy_processor'])
         # generate confusion matrix
-        confusion_matrix_processor(y_test, pred_class, **config['run_model_evaluator']['confusion_matrix_processor'])
+        confusion_matrix_processor(y_test, pred_class, args.out_file_path,
+                                   **config['run_model_evaluator']['confusion_matrix_processor'])
         # generate classification report
-        classification_report_processor(y_test, pred_class,
+        classification_report_processor(y_test, pred_class, args.out_file_path,
                                         **config['run_model_evaluator']['classification_report_processor'])
-        # generate feature importance
     except:
         logger.error("Error: unable to calculate model evaluation metrics")

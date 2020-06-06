@@ -26,20 +26,23 @@ def upload_data(args):
 def download_data(args):
     """
     main function to download the raw data from a s3 bucket
-    :param args (argparse): user-input configuration file
+    :param args (argparse):
+        args.config (path to yaml file with configurations)
+        args.file_path (path to the saved data)
+        args.file_name (name of the saved data)
     """
     with open(args.config, "r") as f:
         config = yaml.load(f, Loader=yaml.SafeLoader)
-    data_downloader(**config['run_download_data']['download_data'])
+    data_downloader(args.file_path, args.file_name, **config['run_download_data']['download_data'])
 
 
-def data_downloader(bucket_name, s3_file, file_path, file_name):
+def data_downloader(file_path, file_name, bucket_name, s3_file):
     """
     Helper function to download data from a S3 bucket to the local folder based on user input
-    :param bucket_name: name of the S3 bucket; default bucket is
-    :param s3_file: name of the file to be downloaded
     :param file_path: path to the saved file
     :param file_name: name of the saved file
+    :param bucket_name: name of the S3 bucket; default bucket is
+    :param s3_file: name of the file to be downloaded
     :return: None
     """
     try:

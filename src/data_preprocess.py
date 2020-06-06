@@ -9,12 +9,17 @@ from src.helper import csv_reader, df_to_csv
 def preprocess_data(args):
     """
     main function to preprocess/clean the raw data
-    :param args (argparse): user-input configuration file
+    :param
+    args.config: path to configuration file
+    args.in_file_path: path to the raw data
+    args.in_file_name: name of the raw data
+    args.out_file_path: path to the preprocessed data
+    args.out_file_name: name of the preprocessed data
     """
     try:
         with open(args.config, "r") as f:
             config = yaml.load(f, Loader=yaml.SafeLoader)
-        df = csv_reader(**config['run_preprocess_data']['read_csv'])
+        df = csv_reader(args.in_file_path, args.in_file_name)
         # 1. process TotalCharges column - convert spaces to NaN and drop 11 missing values
         df = TotalCharges_processor(df)
         # 2 process SeniorCitizen column - convert to binary Yes/No
@@ -25,7 +30,7 @@ def preprocess_data(args):
         # 4 drop the id column
         df = drop_customerID(df)
         # export preprocessed data to a csv file
-        df_to_csv(df, **config['run_preprocess_data']['save_csv'])
+        df_to_csv(df, args.out_file_path, args.out_file_name)
     except:
         logger.error("Error: unable to preprocess the raw data")
 
