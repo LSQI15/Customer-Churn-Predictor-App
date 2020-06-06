@@ -18,7 +18,7 @@ featurize:
 
 eda:
   true_dir: test/reproducibility_true/
-  test_dir: models/
+  test_dir: eda/
   files_to_compare:
     - summary_statistics.csv
 
