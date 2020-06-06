@@ -12,3 +12,4 @@ __pycache__/
 !data/external/
 config/local
 !.gitkeep
+config/.defaultRDS
