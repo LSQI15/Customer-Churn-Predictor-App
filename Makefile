@@ -1,27 +1,41 @@
+DATA_PATH=data
+CONFIG_PATH=config
+MODEL_PATH=models
+EDA_PATH=eda
+
 clean:
-	rm -f data/*
-	rm -f models/*
+	rm -rf ${DATA_PATH}
+	mkdir ${DATA_PATH}
+	touch ${DATA_PATH}/.gitkeep
 
-data/raw.csv: config/config.yml
-	python3 run.py download_data --file_path=data --file_name=raw.csv --config=config/config.yml
-download: data/raw.csv
+	rm -rf ${MODEL_PATH}
+	mkdir ${MODEL_PATH}
+	touch ${MODEL_PATH}/.gitkeep
 
-data/preprocessed.csv: config/config.yml data/raw.csv
-	python3 run.py preprocess_data --in_file_path=data --in_file_name=raw.csv --out_file_path=data --out_file_name=preprocessed.csv --config=config/config.yml
-preprocess: data/preprocessed.csv
+	rm -rf ${EDA_PATH}
+	mkdir ${EDA_PATH}
+	touch ${EDA_PATH}/.gitkeep
 
-data/featurized.csv: config/config.yml data/preprocessed.csv
-	python3 run.py feaurize --in_file_path=data --in_file_name=preprocessed.csv --out_file_path=data --out_file_name=featurized.csv --config=config/config.yml
-feature: data/featurized.csv
+${DATA_PATH}/raw.csv: ${CONFIG_PATH}/config.yml
+	python3 run.py download_data --file_path=${DATA_PATH}/raw.csv --config=${CONFIG_PATH}/config.yml
+download: ${DATA_PATH}/raw.csv
 
-eda: config/config.yml data/preprocessed.csv data/featurized.csv
-	python3 run.py eda --in_file_path_preprocessed=data --in_file_name_preprocessed=preprocessed.csv --in_file_path_featurized=data --in_file_name_featurized=featurized.csv --out_file_path=models --config=config/config.yml
+${DATA_PATH}/preprocessed.csv: ${CONFIG_PATH}/config.yml ${DATA_PATH}/raw.csv
+	python3 run.py preprocess_data --in_file_path=${DATA_PATH}/raw.csv --out_file_path=${DATA_PATH}/preprocessed.csv --config=${CONFIG_PATH}/config.yml
+preprocess: ${DATA_PATH}/preprocessed.csv
 
-random_forest: config/config.yml data/featurized.csv
-	python3 run.py random_forest --in_file_path=data --in_file_name=featurized.csv --out_file_path=models --config=config/config.yml
+${DATA_PATH}/featurized.csv: ${CONFIG_PATH}/config.yml ${DATA_PATH}/preprocessed.csv
+	python3 run.py featurize --in_file_path=${DATA_PATH}/preprocessed.csv --out_file_path=${DATA_PATH}/featurized.csv --config=${CONFIG_PATH}/config.yml
+feature: ${DATA_PATH}/featurized.csv
 
-evaluate: config/config.yml models/predictions.csv
-	python3 run.py evaluate_model --in_file_path=models --in_file_name=predictions.csv --out_file_path=models --config=config/config.yml
+eda: ${CONFIG_PATH}/config.yml ${DATA_PATH}/preprocessed.csv ${DATA_PATH}/featurized.csv
+	python3 run.py eda --in_file_preprocessed=${DATA_PATH}/preprocessed.csv --in_file_featurized=${DATA_PATH}/featurized.csv --out_file_path=${EDA_PATH} --config=${CONFIG_PATH}/config.yml
+
+random_forest: ${CONFIG_PATH}/config.yml ${DATA_PATH}/featurized.csv
+	python3 run.py random_forest --in_file_path=${DATA_PATH}/featurized.csv --out_file_path=${MODEL_PATH} --config=${CONFIG_PATH}/config.yml
+
+evaluate: ${CONFIG_PATH}/config.yml ${MODEL_PATH}/predictions.csv
+	python3 run.py evaluate_model --in_file_path=${MODEL_PATH}/predictions.csv --out_file_path=${MODEL_PATH} --config=${CONFIG_PATH}/config.yml
 
 unit_test:
 	py.test
