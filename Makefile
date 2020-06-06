@@ -1,7 +1,7 @@
 DATA_PATH=data
-CONFIG_PATH=config
-MODEL_PATH=models
 EDA_PATH=eda
+MODEL_PATH=models
+CONFIG_PATH=config
 
 clean:
 	rm -rf ${DATA_PATH}
@@ -40,8 +40,8 @@ evaluate: ${CONFIG_PATH}/config.yml ${MODEL_PATH}/predictions.csv
 unit_test:
 	py.test
 
-reproducibility_test: test/reproducibility_test_config.yml
-	python3 run.py run_reproducibility_tests --config=test/reproducibility_test_config.yml
+reproducibility_test: config/reproducibility_test_config.yml
+	python3 run.py run_reproducibility_tests --config=${CONFIG_PATH}/reproducibility_test_config.yml
 
 all_pipeline: clean download preprocess feature eda random_forest evaluate
 
