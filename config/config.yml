@@ -68,5 +68,4 @@ run_create_db:
     model_path: 'models'
     model_name: 'rf.pkl'
   init_df:
-    file_path: 'data'
-    file_name: 'preprocessed.csv'
+    file_path: 'data/preprocessed.csv'
