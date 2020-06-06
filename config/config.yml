@@ -2,48 +2,20 @@ run_download_data:
   download_data:
     bucket_name: 'msia423-customer-churn'
     s3_file: 'data/raw_data.csv'
-    file_path: 'data'
-    file_name: 'raw.csv'
 
 run_preprocess_data:
-  read_csv:
-    file_path: 'data'
-    file_name: 'raw.csv'
   internet:
     cols: ['OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies']
-  save_csv:
-    file_path: 'data'
-    file_name: 'preprocessed.csv'
-
-run_featurize_data:
-  read_csv:
-    file_path: 'data'
-    file_name: 'preprocessed.csv'
-  save_csv:
-    file_path: 'data'
-    file_name: 'featurized.csv'
 
 run_eda:
-  read_csv:
-    file_path: 'data'
-    file_name: 'featurized.csv'
   summary_stats:
-    file_path: 'models'
     file_name: 'summary_statistics.csv'
   heatmap:
-    file_path: 'models'
     file_name: 'correlation_heatmap.png'
-  preprocessed:
-    file_path: 'data'
-    file_name: 'preprocessed.csv'
   histogram:
     target_col: "Churn"
-    file_path: 'models'
 
 run_randomForest:
-  read_csv:
-    file_path: 'data'
-    file_name: 'featurized.csv'
   train_test_split:
     target_col: "Churn"
     feature_list: ['Gender', 'SeniorCitizen', 'Partner', 'Dependents', 'Tenure',
@@ -57,19 +29,14 @@ run_randomForest:
                    'PaymentMethod_Electronic check', 'PaymentMethod_Mailed check']
     test_prop: 0.2
   X_train:
-    file_path: 'models'
     file_name: 'X_train.csv'
   X_test:
-    file_path: 'models'
     file_name: 'X_test.csv'
   y_train:
-    file_path: 'models'
     file_name: 'y_train.csv'
   y_test:
-    file_path: 'models'
     file_name: 'y_test.csv'
   rf_to_local:
-    file_path: 'models'
     file_name: 'rf.pkl'
   calculate_importance:
     features: ['Gender', 'SeniorCitizen', 'Partner', 'Dependents', 'Tenure',
@@ -82,27 +49,18 @@ run_randomForest:
                    'PaymentMethod_Credit card (automatic)',
                    'PaymentMethod_Electronic check', 'PaymentMethod_Mailed check']
   save_importance:
-    file_path: "models"
     file_name: "feature_importance.csv"
   plot_importance:
-    file_path: "models"
     file_name: "feature_importance.png"
   predictions:
-    file_path: 'models'
     file_name: 'predictions.csv'
 
 run_model_evaluator:
-  evaluate_model:
-    file_path: 'models'
-    file_name: 'predictions.csv'
   auc_accuracy_processor:
-    file_path: "models"
     file_name: "evaluation_auc_accuracy.csv"
   confusion_matrix_processor:
-    file_path: "models"
     file_name: "evaluation_confusion_matrix.csv"
   classification_report_processor:
-    file_path: "models"
     file_name: "evaluation_classification_report.csv"
 
 run_create_db:
