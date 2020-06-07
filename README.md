@@ -31,9 +31,7 @@
         + [5.1 Reproducibility tests](#51-reproducibility-tests)
         + [5.2 Unit tests](#52-unit-tests) 
 - [Customer Churn Predictor App](#Customer-Churn-Predictor-App)
-    * [1. Set Up App Configurations](#1-set-up-app-configurations)
-        + [Flask App Configurations](#a-flask-app-configurations)
-        + [AWS RDS Configurations](#b-aws-rds-configurations)
+    * [1. Set Up Flask App Configurations](#1-set-up-flask-app-configurations)
     * [2. Build the Docker Image for Running the App](#2-build-the-docker-image-for-running-the-app)
     * [3. Initialize database](#3-initialize-database)
     * [4. Running the App](#4-running-the-app)
@@ -262,31 +260,17 @@ docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn unit_t
 
 ## Customer Churn Predictor App
 
-**If you want to use the default RDS/SQLite instance to run the app, go directly to [Step 4. Running the App](#4-running-the-app).**
+**If you want to use the default RDS/SQLite instance to run the app, go directly to [Step 4. Running the App](#4-running-the-app). 
+Otherwise, please follow instructions in Step 1-3 to initialize a database**
 
-### 1. Set Up App Configurations
-
-#### (a) Flask App Configurations
+### 1. Set Up Flask App Configurations
 
 Please edit the `config/flaskconfig.py` file if you want to make change to the SQLite database name, the host, or the 
-port number. Otherwise, the flask app will use the following default configurations:
+port number, etc. Otherwise, the flask app will use the following default configurations:
 
 * `PORT = 5000`
 * `HOST = "0.0.0.0"`
 * `LOCAL_DATABASE="customer.db"`
-
-#### (b) AWS RDS Configurations
-To run the customer churn predictor app, you need to create either a local SQLite database or an AWS RDS database
-in order to store user inputs. If you choose to use AWS RDS database, please enter your AWS credentials 
-`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` and RDS configurations `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_HOST`, 
-`MYSQL_PORT`, and `DATABASE_NAME` in `config/.aws`, by running the following bash command:
-
-```shell script
-vi config/.aws
-```
-
-Note: type `i` to enter the insert mode to make changes to the file. After finishing editing, press `ESC` to exit and 
-type `:wq` to save the change.
 
 ### 2. Build the Docker Image for Running the App
 
@@ -307,9 +291,9 @@ also conduct an initial ingestion if you would like to do so.
 docker run --mount type=bind,source="$(pwd)",target=/app/ predictor_app run.py create_db
 docker run --mount type=bind,source="$(pwd)",target=/app/ predictor_app run.py initial_ingest
 
-# AWS RDS Database
-docker run --env-file=config/.aws --mount type=bind,source="$(pwd)",target=/app/ predictor_app run.py create_db
-docker run --env-file=config/.aws --mount type=bind,source="$(pwd)",target=/app/ predictor_app run.py initial_ingest
+# AWS RDS Database - add SQLALCHEMY_DATABASE_URI as a environment variable
+docker run --mount type=bind,source="$(pwd)",target=/app/ -e SQLALCHEMY_DATABASE_URI=<YOUR_SQLALCHEMY_DATABASE_URI> predictor_app run.py create_db
+docker run --mount type=bind,source="$(pwd)",target=/app/ -e SQLALCHEMY_DATABASE_URI=<YOUR_SQLALCHEMY_DATABASE_URI> predictor_app run.py initial_ingest
 ```
 
 ### 4. Running the App
