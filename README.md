@@ -310,6 +310,7 @@ docker run --mount type=bind,source="$(pwd)",target=/app/ -e SQLALCHEMY_DATABASE
 
 By default, the webapp will be running on a local host at `http://0.0.0.0:5000/` in your browser. You can press `CTRL+C` at any time to quit.
 
+<img src="https://github.com/LSQI15/2020-msia423-Li-Siqi/blob/master/app/App_Demo.png"/>
 
 ### 5. Remove Docker Container
 
