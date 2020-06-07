@@ -260,9 +260,6 @@ docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn unit_t
 
 ## Customer Churn Predictor App
 
-**If you want to use the default RDS instance to run the app, go directly to [Step 4. Running the App](#4-running-the-app). 
-Otherwise, please follow instructions in Step 1-3 to initialize a RDS or SQLite database**
-
 ### 1. Set Up Flask App Configurations
 
 Please edit the `config/flaskconfig.py` file if you want to make change to the SQLite database name, the host, or the 
@@ -281,6 +278,9 @@ docker build -f app/Dockerfile_App -t predictor_app .
 ```
 
 ### 3. Initialize database
+
+**Note: If you want to use the default RDS instance to run the app, go directly to [Step 4. Running the App](#4-running-the-app). 
+Otherwise, please follow instructions below to initialize a RDS or SQLite database**
 
 To store user inputs and their corresponding predictions, you can use either a local SQLite database or an AWS RDS 
 database. By default, the following command will create a table named `customer` in the database of your choice. You can 
