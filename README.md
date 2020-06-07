@@ -82,8 +82,8 @@
 In order to run the app, you first need to clone the repo to your local machine by running the following bash command.
 
 ```shell script
-# clone the development branch of the repo 
-git clone -b development git@github.com:LSQI15/2020-msia423-Li-Siqi.git
+# clone the repo 
+git clone git@github.com:LSQI15/2020-msia423-Li-Siqi.git
 
 # update working directory
 cd 2020-msia423-Li-Siqi
