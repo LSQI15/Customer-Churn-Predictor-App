@@ -260,8 +260,8 @@ docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn unit_t
 
 ## Customer Churn Predictor App
 
-**If you want to use the default RDS/SQLite instance to run the app, go directly to [Step 4. Running the App](#4-running-the-app). 
-Otherwise, please follow instructions in Step 1-3 to initialize a database**
+**If you want to use the default RDS instance to run the app, go directly to [Step 4. Running the App](#4-running-the-app). 
+Otherwise, please follow instructions in Step 1-3 to initialize a RDS or SQLite database**
 
 ### 1. Set Up Flask App Configurations
 
