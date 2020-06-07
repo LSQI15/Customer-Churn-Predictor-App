@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
     <style>
         body {
@@ -38,14 +39,44 @@
         tr:hover {
             background-color: #ffff99;
         }
+
+        .fa {
+            padding: 5px;
+            font-size: 15px;
+            width: 25px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 50%;
+        }
+
+        .fa:hover {
+            opacity: 0.7;
+        }
+
+        .fa-linkedin {
+            background: #007bb5;
+            color: white;
+        }
+
+        .fa-instagram {
+            background: #125688;
+            color: white;
+        }
+
+        .fa-github {
+            background: black;
+            color: white;
+        }
     </style>
 </head>
 
 <body>
 <h4>MSiA-423 Spring 2020</h4>
 <h4>Siqi Li</h4>
+<a href="https://www.linkedin.com/in/siqi-li-0115/" class="fa fa-linkedin"></a>
+<a href="https://github.com/LSQI15" class="fa fa-github"></a>
+<a href="https://www.instagram.com/siqi.li15" class="fa fa-instagram"></a>
 <h4><a href="{{ url_for('home') }}">Customer Churn Predictor</a></h4>
-{#<hr/>#}
 <center><h1>Customer Churn Database</h1></center>
 
 <table>
