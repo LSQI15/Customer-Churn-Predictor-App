@@ -16,9 +16,7 @@
 - [Directory Structure](#directory-structure)
 - [Clone the Repository](#clone-the-repository)
 - [Random Forest Model Pipeline](#random-forest-model-pipeline)
-    * [1. Set Up Pipeline Configurations](#1-set-up-pipeline-configurations)
-        + [AWS credential](#a-aws-credential)
-        + [Model Pipeline File Path](#b-model-pipeline-file-path)
+    * [1. Pipeline File Path Configurations (Optional)](#1-pipeline-file-path-configurations-optional)
     * [2. Build the Docker Image for Executing Model pipeline](#2-build-the-docker-image-for-executing-model-pipeline)
     * [3. Execute the Entire Model Pipeline](#3-execute-the-entire-model-pipeline)
     * [4. Execute model pipeline step by step](#4-execute-model-pipeline-step-by-step)
@@ -89,28 +87,13 @@ In order to run the app, you first need to clone the repo to your local machine 
 # clone the development branch of the repo 
 git clone -b development git@github.com:LSQI15/2020-msia423-Li-Siqi.git
 
-# update  working directory
+# update working directory
 cd 2020-msia423-Li-Siqi
 ```
 
 ## Random Forest Model Pipeline
 
-### 1. Set Up Pipeline Configurations
-
-#### (a) AWS credential
-
-Step 1 of the model pipeline will require AWS credentials in order to download the raw data from a s3 bucket, As the
-result, you need to update the AWS credentials `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in `config/.aws` by 
-running the following bash command:
-
-```shell script
-vi config/.aws
-```
-
-Note: type `i` to enter the insert mode to make changes to the file. After finishing editing, press `ESC` to exit and 
-type `:wq` to save the change.
-
-### (b) Model Pipeline File Path
+### 1. Pipeline File Path Configurations (Optional)
 
 By default:
 * all data-related files (raw data, preprocessed data, and featurized data) will be saved in the `data` folder
@@ -118,8 +101,8 @@ By default:
 * all model-related files (train/test data, random forest model, predictions, feature importance, and model evaluations) 
 will be saved in the `models` folder
 
-To make change to the file paths (eg. store data-related files to `data2`), edit `DATA_PATH`, `EDA_PATH`, and `MODEL_PATH` 
-variables on top of the `Makefile` by running the following bash command:
+If you want to make changes to file paths (eg. store data-related files to `data2`), edit `DATA_PATH`, `EDA_PATH`, 
+and `MODEL_PATH` variables on top of the `Makefile` by running the following bash command:
 
 ```shell script
 vi Makefile
@@ -152,10 +135,10 @@ exploratory data analysis, training a random_forest model, and evaluate model pe
 run:
 
 ```shell script
-docker run --env-file=config/.aws --mount type=bind,source="$(pwd)",target=/app/ customer_churn all_pipeline
+docker run -e AWS_ACCESS_KEY_ID=<YOUR_AWS_ACCESS_KEY_ID> -e AWS_SECRET_ACCESS_KEY=<YOUR_AWS_SECRET_ACCESS_KEY> --mount type=bind,source="$(pwd)",target=/app/ customer_churn all_pipeline
 ```
 
-As indicated in section 1(b), after running the above command, by default, all data-related files (raw data, preprocessed 
+As indicated in section 1, after running the above command, by default, all data-related files (raw data, preprocessed 
 data, and featurized data) will be store in `data/`. All models related files such as EDA graphs, training set, test set
 , random forest model, and model evaluations will can be found in `models/`.
 
@@ -176,7 +159,7 @@ To download the raw data from the default S3 bucket, run the following bash comm
 in the Makefile, the raw data will be downloaded to the `data` folder by default.
 
 ```shell script
-docker run --env-file=config/.aws --mount type=bind,source="$(pwd)",target=/app/ customer_churn download
+docker run -e AWS_ACCESS_KEY_ID=<YOUR_AWS_ACCESS_KEY_ID> -e AWS_SECRET_ACCESS_KEY=<YOUR_AWS_SECRET_ACCESS_KEY> --mount type=bind,source="$(pwd)",target=/app/ customer_churn download
 ```
 
 #### 4.3 Preprocess Raw Data
@@ -188,7 +171,7 @@ The following command will preprocess the raw data. Specifically, it will
  'TechSupport', 'StreamingTV', 'StreamingMovies'
 * drop the drop the customerID column
 
-By default, the preprocessed file will also be saved to the `data` folder.
+By default, the preprocessed file will be saved in the `data` folder.
 
 ```shell script
 docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn preprocess
@@ -279,6 +262,8 @@ docker run  --mount type=bind,source="$(pwd)",target=/app/ customer_churn unit_t
 
 ## Customer Churn Predictor App
 
+**If you want to use the default RDS/SQLite instance to run the app, go directly to [Step 4. Running the App](#4-running-the-app).**
+
 ### 1. Set Up App Configurations
 
 #### (a) Flask App Configurations
@@ -315,45 +300,36 @@ docker build -f app/Dockerfile_App -t predictor_app .
 
 To store user inputs and their corresponding predictions, you can use either a local SQLite database or an AWS RDS 
 database. By default, the following command will create a table named `customer` in the database of your choice. You can 
-also conduct an initial ingestion of 5 records if you would like to do so.
+also conduct an initial ingestion if you would like to do so.
 
 ```shell script
-########################
 # Local SQLite Database
-########################
-# create local SQLite database
 docker run --mount type=bind,source="$(pwd)",target=/app/ predictor_app run.py create_db
-# optional: conduct an initial ingestion
 docker run --mount type=bind,source="$(pwd)",target=/app/ predictor_app run.py initial_ingest
 
-
-########################
 # AWS RDS Database
-########################
-# create AWS RDS database
 docker run --env-file=config/.aws --mount type=bind,source="$(pwd)",target=/app/ predictor_app run.py create_db
-# optional: conduct an initial ingestion
 docker run --env-file=config/.aws --mount type=bind,source="$(pwd)",target=/app/ predictor_app run.py initial_ingest
 ```
 
 ### 4. Running the App
 
-After initializing the databse, to run the customer churn predictor app, enter:
+After initializing the database, to run the customer churn predictor app, enter:
 
 ```shell script
 # Local SQLite Database
 docker run --mount type=bind,source="$(pwd)",target=/app/ -p 5000:5000 --name myapp predictor_app app.py
 
-# AWS RDS Database
-docker run --env-file=config/.aws -p 5000:5000 --name myapp predictor_app app.py
+# AWS RDS Database - add SQLALCHEMY_DATABASE_URI as a environment variable
+docker run --mount type=bind,source="$(pwd)",target=/app/ -e SQLALCHEMY_DATABASE_URI=<YOUR_SQLALCHEMY_DATABASE_URI> -p 5000:5000 --name myapp predictor_app app.py
 ```
 
-The app will be running on a local host at `http://0.0.0.0:5000/`. You can press `CTRL+C` at any time to quit.
+By default, the webapp will be running on a local host at `http://0.0.0.0:5000/` in your browser. You can press `CTRL+C` at any time to quit.
 
 
 ### 5. Remove Docker Container
 
-After using the app, please enter the following bash command to remove the Docker container
+After using the app, please enter the following bash command to remove the Docker container.
 
 ```shell script
 docker rm myapp
