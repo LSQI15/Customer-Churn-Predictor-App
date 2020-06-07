@@ -35,14 +35,14 @@ def df_to_csv(df, file_path):
         logger.error("Error: unable to save file %s", file_loc)
 
 
-def df_to_csv2(df, file_path,file_name):
+def df_to_csv2(df, file_path, file_name):
     """
     helper function to convert a pandas DataFrame to a csv file
     :param df: a pandas DataFrame to be exported to csv file
     :param file_path: the directory in which output file will be saved
     :param file_name: name of the output file
     """
-    file_loc = file_path+'/'+file_name
+    file_loc = file_path + '/' + file_name
     try:
         df.to_csv(file_loc, index=False)
         logger.info("%s has been saved.", file_loc)

@@ -8,7 +8,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 logger = logging.getLogger(__name__)
 
-from src.helper import csv_reader, df_to_csv,df_to_csv2
+from src.helper import csv_reader, df_to_csv, df_to_csv2
 
 
 def choose_target(data, target):

@@ -41,7 +41,7 @@ def summary_maker(df, file_path, file_name):
     """
     try:
         statistics = df.describe().transpose().reset_index().rename(columns={"index": "feature"})
-        df_to_csv(statistics, file_path+'/'+file_name)
+        df_to_csv(statistics, file_path + '/' + file_name)
         logger.info('Summary statistics has been calculated and saved as a .csv file')
     except:
         logger.error("Error: unable to generate a summary statistics table")
