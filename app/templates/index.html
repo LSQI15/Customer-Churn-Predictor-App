@@ -39,7 +39,7 @@
             text-align: center;
             padding: 10px;
             margin-bottom: 40px;
-            font-size: 0.9em;
+            font-size: small;
         }
 
         tr:nth-child(odd) {
@@ -94,7 +94,7 @@
     <center><h1>Customer Churn Predictor</h1></center>
 
     <h3>Will a customer stay or churn?</h3>
-    <p style="background-color: white;">Please complete the following information and click on Predict to make a
+    <p style="font-size: medium; background-color: white;">Please complete the following information and click on Predict to make a
         prediction.</p>
 
     <!-- User input for receiving query for random forest model to make prediction -->
@@ -191,7 +191,8 @@
     <hr>
 
     <h3>Prediction Result</h3>
-    {{ prediction_text }}<br><br>
+    <p style=" background-color: white; font-size: medium">{{ prediction_text }}</p>
+    <br><br>
     <div class="container">
         <div class="progress">
             <div class="{{ progress_bar_class }}" role="progressbar" aria-valuenow={{ proba }} aria-valuemin="0"
@@ -202,7 +203,7 @@
         </div>
     </div>
     <h3>Suggested Offer</h3>
-    {{ rec }}
+    <p style=" background-color: white; font-size: medium">{{ rec }}</p>
     <h3>Characteristics Analyzed</h3>
     <center>{{ tables|safe }}</center>
 
