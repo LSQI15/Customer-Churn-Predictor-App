@@ -1,0 +1,71 @@
+run_download_data:
+  download_data:
+    bucket_name: 'msia423-customer-churn'
+    s3_file: 'data/raw_data.csv'
+
+run_preprocess_data:
+  internet:
+    cols: ['OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies']
+
+run_eda:
+  summary_stats:
+    file_name: 'summary_statistics.csv'
+  heatmap:
+    file_name: 'correlation_heatmap.png'
+  histogram:
+    target_col: "Churn"
+
+run_randomForest:
+  train_test_split:
+    target_col: "Churn"
+    feature_list: ['Gender', 'SeniorCitizen', 'Partner', 'Dependents', 'Tenure',
+                   'PhoneService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection',
+                   'TechSupport', 'StreamingTV', 'StreamingMovies', 'PaperlessBilling',
+                   'MonthlyCharges', 'TotalCharges',
+                   'MultipleLines_No phone service', 'MultipleLines_Yes',
+                   'InternetService_Fiber optic', 'InternetService_No',
+                   'Contract_One year', 'Contract_Two year',
+                   'PaymentMethod_Credit card (automatic)',
+                   'PaymentMethod_Electronic check', 'PaymentMethod_Mailed check']
+    test_prop: 0.2
+  X_train:
+    file_name: 'X_train.csv'
+  X_test:
+    file_name: 'X_test.csv'
+  y_train:
+    file_name: 'y_train.csv'
+  y_test:
+    file_name: 'y_test.csv'
+  rf_to_local:
+    file_name: 'rf.pkl'
+  calculate_importance:
+    features: ['Gender', 'SeniorCitizen', 'Partner', 'Dependents', 'Tenure',
+                   'PhoneService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection',
+                   'TechSupport', 'StreamingTV', 'StreamingMovies', 'PaperlessBilling',
+                   'MonthlyCharges', 'TotalCharges',
+                   'MultipleLines_No phone service', 'MultipleLines_Yes',
+                   'InternetService_Fiber optic', 'InternetService_No',
+                   'Contract_One year', 'Contract_Two year',
+                   'PaymentMethod_Credit card (automatic)',
+                   'PaymentMethod_Electronic check', 'PaymentMethod_Mailed check']
+  save_importance:
+    file_name: "feature_importance.csv"
+  plot_importance:
+    file_name: "feature_importance.png"
+  predictions:
+    file_name: 'predictions.csv'
+
+run_model_evaluator:
+  auc_accuracy_processor:
+    file_name: "evaluation_auc_accuracy.csv"
+  confusion_matrix_processor:
+    file_name: "evaluation_confusion_matrix.csv"
+  classification_report_processor:
+    file_name: "evaluation_classification_report.csv"
+
+run_create_db:
+  init_ingest:
+    model_path: 'models'
+    model_name: 'rf.pkl'
+  init_df:
+    file_path: 'data/preprocessed.csv'

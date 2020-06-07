@@ -1,30 +1,95 @@
 import argparse
+import logging.config
 
-from src.add_songs import create_db, add_track
+from config.flaskconfig import LOGGING_CONFIG
+
+logging.config.fileConfig(LOGGING_CONFIG)
+logger = logging.getLogger(__name__)
+
+from src.upload_download_data import upload_data, download_data
+from src.data_preprocess import preprocess_data
+from src.featurize import featurize
+from src.eda import eda
+from src.model_training import random_forest
+from src.model_evaluation import evaluate_model
+from config.flaskconfig import SQLALCHEMY_DATABASE_URI
+from src.customer_db import create_db, initial_ingest
+from test.reproducibility_test import run_reproducibility_tests
 
 if __name__ == '__main__':
-
-    # Add parsers for both creating a database and adding songs to it
-    parser = argparse.ArgumentParser(description="Create and/or add data to database")
+    parser = argparse.ArgumentParser(description="Run Components of Model Source Code")
     subparsers = parser.add_subparsers()
 
-    # Sub-parser for creating a database
-    sb_create = subparsers.add_parser("create_db", description="Create database")
-    sb_create.add_argument("--artist", default="Britney Spears", help="Artist of song to be added")
-    sb_create.add_argument("--title", default="Radar", help="Title of song to be added")
-    sb_create.add_argument("--album", default="Circus", help="Album of song being added.")
-    sb_create.add_argument("--engine_string", default='sqlite:///data/tracks.db',
-                           help="SQLAlchemy connection URI for database")
-    sb_create.set_defaults(func=create_db)
+    # Sub-parser for downloading raw data from S3 bucket
+    sb_download = subparsers.add_parser("download_data", description="Download data from S3 bucket")
+    sb_download.add_argument('--file_path', default='data/raw.csv', help='path to the raw data')
+    sb_download.add_argument('--config', default='config/config.yml', help='path to yaml file with configurations')
+    sb_download.set_defaults(func=download_data)
 
-    # Sub-parser for ingesting new data
-    sb_ingest = subparsers.add_parser("ingest", description="Add data to database")
-    sb_ingest.add_argument("--artist", default="Emancipator", help="Artist of song to be added")
-    sb_ingest.add_argument("--title", default="Minor Cause", help="Title of song to be added")
-    sb_ingest.add_argument("--album", default="Dusk to Dawn", help="Album of song being added")
-    sb_ingest.add_argument("--engine_string", default='sqlite:///data/tracks.db',
-                           help="SQLAlchemy connection URI for database")
-    sb_ingest.set_defaults(func=add_track)
+    # Sub-parser for cleaning raw data
+    sb_preprocess = subparsers.add_parser("preprocess_data", description="Clean the raw data")
+    sb_preprocess.add_argument('--in_file_path', default='data/raw.csv', help='path to the raw data')
+    sb_preprocess.add_argument('--out_file_path', default='data/preprocessed.csv', help='path to the preprocessed data')
+    sb_preprocess.add_argument('--config', default='config/config.yml', help='path to yaml file with configurations')
+    sb_preprocess.set_defaults(func=preprocess_data)
+
+    # Sub-parser for featurizing preprocessed data
+    sb_feature = subparsers.add_parser("featurize", description="featurize the preprocessed data")
+    sb_feature.add_argument('--in_file_path', default='data/preprocessed.csv', help='path to the preprocessed data')
+    sb_feature.add_argument('--out_file_path', default='data/featurized.csv', help='path to the featurized data')
+    sb_feature.add_argument('--config', default='config/config.yml', help='path to yaml file with configurations')
+    sb_feature.set_defaults(func=featurize)
+
+    # Sub-parser for exploratory data analysis
+    sb_eda = subparsers.add_parser("eda", description="exploratory data analysis")
+    sb_eda.add_argument('--in_file_preprocessed', default='data/preprocessed.csv', help='path to preprocessed data')
+    sb_eda.add_argument('--in_file_featurized', default='data/featurized.csv', help='path to featurized data')
+    sb_eda.add_argument('--out_file_path', default='eda', help='path to eda outputs')
+    sb_eda.add_argument('--config', default='config/config.yml', help='path to yaml file with configurations')
+    sb_eda.set_defaults(func=eda)
+
+    # Sub-parser for training random forest model
+    sb_random_forest = subparsers.add_parser("random_forest", description="training random forest model")
+    sb_random_forest.add_argument('--in_file_path', default='data/featurized.csv', help='path to the featurized data')
+    sb_random_forest.add_argument('--out_file_path', default='models', help='path to model-related outputs')
+    sb_random_forest.add_argument('--config', default='config/config.yml', help='path to yaml file with configurations')
+    sb_random_forest.set_defaults(func=random_forest)
+
+    # Sub-parser for evaluating the random forest model
+    sb_eval = subparsers.add_parser("evaluate_model",
+                                    description="evaluate the model and save evaluations in .csv files")
+    sb_eval.add_argument('--in_file_path', default='models/predictions.csv', help='path to the model predictions file')
+    sb_eval.add_argument('--out_file_path', default='models', help='path to evaluation-related outputs')
+    sb_eval.add_argument('--config', default='config/config.yml', help='path to yaml file with configurations')
+    sb_eval.set_defaults(func=evaluate_model)
+
+    # Sub-parser for creating a database to store user input
+    sb_create_db = subparsers.add_parser("create_db", description="Creating the Databse")
+    sb_create_db.add_argument("--engine_string", default=SQLALCHEMY_DATABASE_URI,
+                              help="SQLAlchemy connection URI for database")
+    sb_create_db.set_defaults(func=create_db)
+
+    # Sub-parser for conducting initial ingestion to the database
+    sb_init_ingest = subparsers.add_parser("initial_ingest", description="Initial ingestion to the Databse")
+    sb_init_ingest.add_argument("--engine_string", default=SQLALCHEMY_DATABASE_URI,
+                                help="SQLAlchemy connection URI for database")
+    sb_init_ingest.add_argument('--config', default='config/config.yml', help='path to yaml file with configurations')
+    sb_init_ingest.add_argument('--num_records', default=5, help='the number of records to ingest')
+    sb_init_ingest.set_defaults(func=initial_ingest)
+
+    # Sub-parser for conducting reproducibility test
+    sb_reproducibility_test = subparsers.add_parser("run_reproducibility_tests",
+                                                    description="Run reproducibility tests")
+    sb_reproducibility_test.add_argument('--config', default='test/reproducibility_test_config.yml',
+                                         help='path to yaml file with configurations')
+    sb_reproducibility_test.set_defaults(func=run_reproducibility_tests)
+
+    # Sub-parser for uploading the data to S3 bucket
+    sb_upload = subparsers.add_parser("upload_data", description="Upload data into S3")
+    sb_upload.add_argument('--local_file_path', help="Local folder containing data to be uploaded")
+    sb_upload.add_argument('--file_name', help="File name of the data file")
+    sb_upload.add_argument('--bucket_name', help="AWS S3 bucket where the data will be stored")
+    sb_upload.set_defaults(func=upload_data)
 
     args = parser.parse_args()
     args.func(args)

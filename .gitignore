@@ -8,8 +8,8 @@ __pycache__/
 .ipynb_checkpoints/
 
 
-data/*
 !data/sample/
 !data/external/
 config/local
 !.gitkeep
+config/.defaultRDS
