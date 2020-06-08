@@ -250,8 +250,8 @@ docker build -f app/Dockerfile_Pipeline -t customer_churn .
 
 #### 5.2 Unit tests
 
-The unit testing module test 5 functions to clean features and select the response variable. Each function will be tested
-twice - once with valid input and once with invalid input. This leads to a total of 10 tests. To conduct the unit tests,
+The unit testing module tests 9 functions used during different stages of the model pipeline. Each function will be tested
+twice - once with valid input and once with invalid input. This leads to a total of 18 tests. To conduct unit tests,
 run the following bash command.
 
 ```shell script
