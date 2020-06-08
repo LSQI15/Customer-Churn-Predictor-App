@@ -17,10 +17,10 @@
 - [Clone the Repository](#clone-the-repository)
 - [Random Forest Model Pipeline](#random-forest-model-pipeline)
     * [1. Pipeline File Path Configurations (Optional)](#1-pipeline-file-path-configurations-optional)
-    * [2. Build the Docker Image for Executing Model pipeline](#2-build-the-docker-image-for-executing-model-pipeline)
+    * [2. Build the Docker Image for Executing Model Pipeline](#2-build-the-docker-image-for-executing-model-pipeline)
     * [3. Execute the Entire Model Pipeline](#3-execute-the-entire-model-pipeline)
-    * [4. Execute model pipeline step by step](#4-execute-model-pipeline-step-by-step)
-        + [4.1 Clean the working directory](#41-clean-the-working-directory)
+    * [4. Execute Model Pipeline Step by Step](#4-execute-model-pipeline-step-by-step)
+        + [4.1 Clean the Working Directory](#41-clean-the-working-directory)
         + [4.2 Download Raw Data from S3 Bucket](#42-download-raw-data-from-s3-bucket)
         + [4.3 Preprocess Raw Data](#43-preprocess-raw-data)
         + [4.4 Featurize Preprocessed Data](#44-featurize-preprocessed-data)
@@ -118,7 +118,7 @@ vi config/reproducibility_test_config.yml
 Note: type `i` to enter the insert mode to make changes to the file. After finishing editing, press `ESC` to exit and 
 type `:wq` to save the change.
 
-### 2. Build the Docker Image for Executing Model pipeline
+### 2. Build the Docker Image for Executing Model Pipeline
 
 The Dockerfile for running the model pipeline is in the `app/` folder. To build the image, run:
 
@@ -140,7 +140,7 @@ As indicated in section 1, after running the above command, by default, all data
 data, and featurized data) will be store in `data/`. All models related files such as EDA graphs, training set, test set
 , random forest model, and model evaluations will can be found in `models/`.
 
-### 4. Execute model pipeline step by step
+### 4. Execute Model Pipeline Step by Step
 
 #### 4.1 Clean the working directory
 
