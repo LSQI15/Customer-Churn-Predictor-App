@@ -22,7 +22,7 @@ def featurize(args):
             config = yaml.load(f, Loader=yaml.SafeLoader)
         # read preprocessed data
         df = csv_reader(args.in_file_path)
-        features = df.drop("Churn", axis=1)
+        features = filter_features(df)
         logger.info("Preprocessed data has been loaded.")
         # encode binary columns (features+target)
         bi_cols = df.nunique()[df.nunique() == 2].keys().tolist()
@@ -39,3 +39,18 @@ def featurize(args):
         df_to_csv(df, args.out_file_path)
     except:
         logger.error("Error: unable to featurize the preprocessed data")
+
+
+def filter_features(df):
+    """
+    Helper function to select only the feature columns in the dataframe
+    :param df:
+    :return:
+    """
+    if 'Churn' in df.columns:
+        features = df.drop("Churn", axis=1)
+        logger.info('Feature columns have been selected')
+        return features
+    else:
+        logger.error("Target Column \'Churn\' is not in the data frame.")
+        raise KeyError("Target Column \'Churn\' is not in the data frame.")

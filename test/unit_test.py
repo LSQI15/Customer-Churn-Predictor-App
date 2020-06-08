@@ -5,7 +5,9 @@ pd.options.mode.chained_assignment = None
 
 from src.data_preprocess import TotalCharges_processor, SeniorCitizen_processor, No_internet_service_converter, \
     drop_customerID
+from src.featurize import filter_features
 from src.model_training import choose_target
+from src.model_evaluation import auc_accuracy_processor, confusion_matrix_processor, classification_report_processor
 
 """
 test drop_customerID(df) function
@@ -174,3 +176,132 @@ def test_choose_target_invalid_input():
     # if target column is missing, check whether an keyError is raised.
     with pytest.raises(KeyError):
         choose_target(featurized, 'Non-Existing_Column')
+
+
+"""
+Test filter_features(df) function
+"""
+
+
+def test_filter_features_valid_input():
+    """
+    function to test filter_features(df) function with valid input
+    """
+    # load files for testing
+    preprocessed = pd.read_csv("test/unit_test_true/preprocessed.csv")
+
+    # happy path:
+    # test whether the target columns is the same as the expected columns
+    expected = preprocessed.drop('Churn', axis=1)
+    happy_out = filter_features(preprocessed)
+    assert expected.equals(happy_out)
+
+
+def test_filter_features_invalid_input():
+    """
+    function to test filter_features(df) function with invalid input
+    """
+    # load files for testing
+    preprocessed = pd.read_csv("test/unit_test_true/preprocessed.csv")
+
+    # unhappy path:
+    # if target column is missing, check whether an keyError is raised.
+    bad_in = preprocessed.drop('Churn', axis=1)
+    with pytest.raises(KeyError):
+        filter_features(bad_in)
+
+
+"""
+Test auc_accuracy_processor(pred) function
+"""
+
+
+def test_auc_accuracy_processor_valid_input():
+    """
+    function to test auc_accuracy_processor(pred) function with valid input
+    """
+    # load files for testing
+    valid_in = pd.read_csv("test/unit_test_true/predictions.csv")
+
+    # happy path:
+    # test whether the function generate the same auc/accuracy output
+    expected = pd.read_csv("test/unit_test_true/evaluation_auc_accuracy.csv")
+    happy_out = auc_accuracy_processor(valid_in)
+    assert expected.equals(happy_out)
+
+
+def test_auc_accuracy_processor_invalid_input():
+    """
+    function to test auc_accuracy_processor(pred) function with invalid input
+    """
+    # load files for testing
+    bad_in = pd.read_csv("test/unit_test_true/predictions.csv").drop('y_test', axis=1)
+
+    # unhappy path:
+    # if one required column is missing, check whether an keyError is raised.
+    with pytest.raises(KeyError):
+        auc_accuracy_processor(bad_in)
+
+
+"""
+Test confusion_matrix_processor(pred) function
+"""
+
+
+def test_confusion_matrix_processor_valid_input():
+    """
+    function to test confusion_matrix_processor(pred) function with valid input
+    """
+    # load files for testing
+    valid_in = pd.read_csv("test/unit_test_true/predictions.csv")
+
+    # happy path:
+    # test whether the function generate the same auc/accuracy output
+    expected = pd.read_csv("test/unit_test_true/evaluation_confusion_matrix.csv")
+    happy_out = confusion_matrix_processor(valid_in).reset_index(drop=True)
+    assert expected.equals(happy_out)
+
+
+def test_confusion_matrix_processor_invalid_input():
+    """
+    function to test confusion_matrix_processor(pred) function with invalid input
+    """
+    # load files for testing
+    bad_in = pd.read_csv("test/unit_test_true/predictions.csv").drop('y_test', axis=1)
+
+    # unhappy path:
+    # if one required column is missing, check whether an keyError is raised.
+    with pytest.raises(KeyError):
+        confusion_matrix_processor(bad_in)
+
+
+"""
+Test classification_report_processor(pred) function
+"""
+
+
+def test_classification_report_processor_valid_input():
+    """
+    function to test classification_report_processor(pred) function with valid input
+    """
+    # load files for testing
+    valid_in = pd.read_csv("test/unit_test_true/predictions.csv")
+
+    # happy path:
+    # test whether the function generate the same auc/accuracy output
+    expected = pd.read_csv("test/unit_test_true/evaluation_classification_report.csv").round(10)
+    happy_out = classification_report_processor(valid_in).round(10).reset_index(drop=True)
+    assert expected.equals(happy_out)
+
+
+def test_classification_report_processor_invalid_input():
+    """
+    function to test classification_report_processor(pred) function with invalid input
+    """
+    # load files for testing
+    bad_in = pd.read_csv("test/unit_test_true/predictions.csv").drop('y_test', axis=1)
+
+    # unhappy path:
+    # if one required column is missing, check whether an keyError is raised.
+    with pytest.raises(KeyError):
+        classification_report_processor(bad_in)

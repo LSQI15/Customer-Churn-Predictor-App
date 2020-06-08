@@ -7,68 +7,65 @@ from sklearn import metrics
 
 logger = logging.getLogger(__name__)
 
-from src.helper import csv_reader
+from src.helper import csv_reader, df_to_csv2
 
 
-def auc_accuracy_processor(y_test, pred_prob, pred_class, file_path, file_name):
+def auc_accuracy_processor(pred):
     """
     helper function to calculate the auc and accuracy of predictions
-    :param y_test: the true response class
-    :param pred_prob: the predicted response probability
-    :param pred_class: the predicted response class
-    :param file_path: the path to the output file
-    :param file_name: the name of the output file
+    :param pred: a pandas dataframe contains 3 columns (y_test, pred_prob and pred_class)
     """
-    try:
-        out_file = file_path + "/" + file_name
+    if 'y_test' in pred.columns and 'pred_prob' in pred.columns and 'pred_class' in pred.columns:
+        y_test = pred.y_test
+        pred_prob = pred.pred_prob
+        pred_class = pred.pred_class
         auc = sklearn.metrics.roc_auc_score(y_test, pred_prob)
         accuracy = sklearn.metrics.accuracy_score(y_test, pred_class)
         auc_accuracy_df = pd.DataFrame(data={'auc': [auc], 'accuracy': [accuracy]})
         # output csv file
-        auc_accuracy_df.to_csv(out_file, index=False)
-        logger.info("AUC and Accuracy have been calculated and exported as a .csv file")
-    except:
+        logger.info("AUC and Accuracy have been calculated")
+        return auc_accuracy_df
+    else:
         logger.error("Error: unable to calculate auc/accuracy.")
+        raise KeyError("One or more of the required column is not in the input data frame.")
 
 
-def confusion_matrix_processor(y_test, pred_class, file_path, file_name):
+def confusion_matrix_processor(pred):
     """
     helper function to calculate the confusion matrix
-    :param y_test: the true response class
-    :param pred_class: the predicted response class
-    :param file_path: the path to the output file
-    :param file_name: the name of the output file
+    :param pred: a pandas dataframe contains 3 columns (y_test, pred_prob and pred_class)
     """
-    try:
-        out_file = file_path + "/" + file_name
+    if 'y_test' in pred.columns and 'pred_class' in pred.columns:
+        y_test = pred.y_test
+        pred_class = pred.pred_class
         confusion = sklearn.metrics.confusion_matrix(y_test, pred_class)
         confusion_df = pd.DataFrame(confusion,
                                     index=['Actual negative', 'Actual positive'],
                                     columns=['Predicted negative', 'Predicted positive'])
         # output csv file
-        confusion_df.to_csv(out_file, index=False)
-        logger.info("Confusion matrix has been calculated and exported as a .csv file")
-    except:
+        logger.info("Confusion matrix has been calculated.")
+        return confusion_df
+    else:
         logger.error("Error: unable to generate confusion matrix")
+        raise KeyError("One or more of the required column is not in the input data frame.")
 
 
-def classification_report_processor(y_test, pred_class, file_path, file_name):
+def classification_report_processor(pred):
     """
     helper function to generate classification report
-    :param y_test: the true response class
-    :param pred_class: the predicted response class
-    :param file_path: the path to the output file
-    :param file_name: the name of the output file
+    :param pred: a pandas dataframe contains 3 columns (y_test, pred_prob and pred_class)
     """
-    try:
-        out_file = file_path + "/" + file_name
+    if 'y_test' in pred.columns and 'pred_class' in pred.columns:
+        y_test = pred.y_test
+        pred_class = pred.pred_class
         classification_report_dict = sklearn.metrics.classification_report(y_test, pred_class, output_dict=True)
         classification_report_df = pd.DataFrame.from_dict(classification_report_dict)
         # output csv file
-        classification_report_df.to_csv(out_file, index=False)
-        logger.info("Classification report has been calculated and exported as a .csv file")
-    except:
+        logger.info("Classification report has been calculated.")
+        return classification_report_df
+    else:
         logger.error("Error: unable to generate classification report")
+        raise KeyError("One or more of the required column is not in the input data frame.")
 
 
 def evaluate_model(args):
@@ -85,19 +82,14 @@ def evaluate_model(args):
         # read data
         pred = csv_reader(args.in_file_path)
         logger.info("Prediction results for model evaluation has been loaded.")
-        # parse the data
-        y_test = pred.y_test
-        pred_prob = pred.pred_prob
-        pred_class = pred.pred_class
-        logger.info("Prediction results for model evaluation has been parsed, and are ready for evaluation.")
         # calculate evaluation metrics
-        auc_accuracy_processor(y_test, pred_prob, pred_class, args.out_file_path,
-                               **config['run_model_evaluator']['auc_accuracy_processor'])
+        auc_accuracy_df = auc_accuracy_processor(pred)
+        df_to_csv2(auc_accuracy_df, args.out_file_path, **config['run_model_evaluator']['auc_accuracy_processor'])
         # generate confusion matrix
-        confusion_matrix_processor(y_test, pred_class, args.out_file_path,
-                                   **config['run_model_evaluator']['confusion_matrix_processor'])
+        confusion_df = confusion_matrix_processor(pred)
+        df_to_csv2(confusion_df, args.out_file_path, **config['run_model_evaluator']['confusion_matrix_processor'])
         # generate classification report
-        classification_report_processor(y_test, pred_class, args.out_file_path,
-                                        **config['run_model_evaluator']['classification_report_processor'])
+        classification_report_df = classification_report_processor(pred)
+        df_to_csv2(classification_report_df, args.out_file_path, **config['run_model_evaluator']['classification_report_processor'])
     except:
         logger.error("Error: unable to calculate model evaluation metrics")

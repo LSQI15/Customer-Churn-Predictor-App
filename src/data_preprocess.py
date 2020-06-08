@@ -39,7 +39,7 @@ def TotalCharges_processor(df):
     :param df: a pandas data frame contains the raw data
     :return processed_df: a pandas data frame with 'TotalCharges' column processed.
     """
-    try:
+    if 'TotalCharges' in df.columns:
         processed_df = df
         # replace spaces with NaN in the TotalCharges column
         processed_df['TotalCharges'] = processed_df["TotalCharges"].replace(" ", np.nan).astype(float)
@@ -48,7 +48,7 @@ def TotalCharges_processor(df):
         processed_df = processed_df.dropna()
         logger.info("NaN values in TotalCharges column ha been dropped.")
         return processed_df
-    except:
+    else:
         logger.error('Error: unable to clean column TotalCharges. TotalCharges is not in the input data frame.')
         raise KeyError("TotalCharges is not in the input data frame.")
 
@@ -59,12 +59,12 @@ def SeniorCitizen_processor(df):
     :param df: a pandas data frame contains the raw data
     :return processed_df: a pandas data frame with 'SeniorCitizen' column processed.
     """
-    try:
+    if 'SeniorCitizen' in df.columns:
         processed_df = df
         processed_df["SeniorCitizen"] = processed_df["SeniorCitizen"].replace({1: "Yes", 0: "No"})
         logger.info("Binary values in SeniorCitizen column have been replaced with Yes/No")
         return processed_df
-    except:
+    else:
         logger.error('Error: unable to clean column SeniorCitizen. SeniorCitizen is not in the input data frame.')
         raise KeyError("SeniorCitizen is not in the input data frame.")
 
@@ -79,10 +79,10 @@ def No_internet_service_converter(df, cols):
     """
     processed_df = df
     for i in cols:
-        try:
+        if i in df.columns:
             processed_df[i] = processed_df[i].replace({'No internet service': 'No'})
             logger.info("\"No internet service\" have been replaced with No in column %s" % i)
-        except:
+        else:
             logger.error('Error: unable to clean column %s.' % i + "%s is not in the input data frame." % i)
             raise KeyError("%s is not in the input data frame." % i)
     return processed_df
@@ -95,10 +95,10 @@ def drop_customerID(df):
     :return processed_df: a pandas data frame with customerID column drop
     """
     processed_df = df
-    try:
+    if 'customerID' in df.columns:
         processed_df = processed_df.drop('customerID', axis=1)
         logger.info("customerID column has been dropped")
         return processed_df
-    except:
+    else:
         logger.error('Error: unable to drop column customerID. customerID is not in the input data frame.')
         raise KeyError("customerID is not in the input data frame.")
