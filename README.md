@@ -132,6 +132,9 @@ To run the entire model pipeline (clean working directory, download data, prepro
 exploratory data analysis, training a random_forest model, and evaluate model performance) using default configurations,
 run:
 
+**note**: you will need to set your environment variable `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, if you haven't
+done so.
+
 ```shell script
 export AWS_ACCESS_KEY_ID=<YOUR_AWS_ACCESS_KEY_ID>
 export AWS_SECRET_ACCESS_KEY=<YOUR_AWS_SECRET_ACCESS_KEY>
@@ -158,8 +161,13 @@ docker run --mount type=bind,source="$(pwd)",target=/app/ customer_churn clean
 To download the raw data from the default S3 bucket, run the following bash command. Unless you specified another directory
 in the Makefile, the raw data will be downloaded to the `data` folder by default.
 
+**note**: you will need to set your environment variable `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, if you haven't
+done so.
+
 ```shell script
-docker run -e AWS_ACCESS_KEY_ID=<YOUR_AWS_ACCESS_KEY_ID> -e AWS_SECRET_ACCESS_KEY=<YOUR_AWS_SECRET_ACCESS_KEY> --mount type=bind,source="$(pwd)",target=/app/ customer_churn download
+export AWS_ACCESS_KEY_ID=<YOUR_AWS_ACCESS_KEY_ID>
+export AWS_SECRET_ACCESS_KEY=<YOUR_AWS_SECRET_ACCESS_KEY>
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ customer_churn download
 ```
 
 #### 4.3 Preprocess Raw Data
@@ -288,6 +296,8 @@ To store user inputs and their corresponding predictions, you can use either a l
 database. By default, the following command will create a table named `customer` in the database of your choice. You can 
 also conduct an initial ingestion if you would like to do so.
 
+**note**: you will need to set your environment variable `SQLALCHEMY_DATABASE_URI`, if you haven't done so.
+
 ```shell script
 export SQLALCHEMY_DATABASE_URI=<YOUR_SQLALCHEMY_DATABASE_URI>
 docker run --mount type=bind,source="$(pwd)",target=/app/ -e SQLALCHEMY_DATABASE_URI predictor_app run.py create_db
@@ -297,6 +307,8 @@ docker run --mount type=bind,source="$(pwd)",target=/app/ -e SQLALCHEMY_DATABASE
 ### 4. Running the App
 
 After initializing the database, to run the customer churn predictor app, enter:
+
+**note**: you will need to set your environment variable `SQLALCHEMY_DATABASE_URI`, if you haven't done so.
 
 ```shell script
 export SQLALCHEMY_DATABASE_URI=<YOUR_SQLALCHEMY_DATABASE_URI>
