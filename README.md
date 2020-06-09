@@ -133,7 +133,9 @@ exploratory data analysis, training a random_forest model, and evaluate model pe
 run:
 
 ```shell script
-docker run -e AWS_ACCESS_KEY_ID=<YOUR_AWS_ACCESS_KEY_ID> -e AWS_SECRET_ACCESS_KEY=<YOUR_AWS_SECRET_ACCESS_KEY> --mount type=bind,source="$(pwd)",target=/app/ customer_churn all_pipeline
+export AWS_ACCESS_KEY_ID=<YOUR_AWS_ACCESS_KEY_ID>
+export AWS_SECRET_ACCESS_KEY=<YOUR_AWS_SECRET_ACCESS_KEY>
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ customer_churn all_pipeline
 ```
 
 As indicated in section 1, after running the above command, by default, all data-related files (raw data, preprocessed 
@@ -287,13 +289,9 @@ database. By default, the following command will create a table named `customer`
 also conduct an initial ingestion if you would like to do so.
 
 ```shell script
-# Local SQLite Database
-docker run --mount type=bind,source="$(pwd)",target=/app/ predictor_app run.py create_db
-docker run --mount type=bind,source="$(pwd)",target=/app/ predictor_app run.py initial_ingest
-
-# AWS RDS Database - add SQLALCHEMY_DATABASE_URI as a environment variable
-docker run --mount type=bind,source="$(pwd)",target=/app/ -e SQLALCHEMY_DATABASE_URI=<YOUR_SQLALCHEMY_DATABASE_URI> predictor_app run.py create_db
-docker run --mount type=bind,source="$(pwd)",target=/app/ -e SQLALCHEMY_DATABASE_URI=<YOUR_SQLALCHEMY_DATABASE_URI> predictor_app run.py initial_ingest
+export SQLALCHEMY_DATABASE_URI=<YOUR_SQLALCHEMY_DATABASE_URI>
+docker run --mount type=bind,source="$(pwd)",target=/app/ -e SQLALCHEMY_DATABASE_URI predictor_app run.py create_db
+docker run --mount type=bind,source="$(pwd)",target=/app/ -e SQLALCHEMY_DATABASE_URI predictor_app run.py initial_ingest
 ```
 
 ### 4. Running the App
@@ -301,11 +299,8 @@ docker run --mount type=bind,source="$(pwd)",target=/app/ -e SQLALCHEMY_DATABASE
 After initializing the database, to run the customer churn predictor app, enter:
 
 ```shell script
-# Local SQLite Database
-docker run --mount type=bind,source="$(pwd)",target=/app/ -p 5000:5000 --name myapp predictor_app app.py
-
-# AWS RDS Database - add SQLALCHEMY_DATABASE_URI as a environment variable
-docker run --mount type=bind,source="$(pwd)",target=/app/ -e SQLALCHEMY_DATABASE_URI=<YOUR_SQLALCHEMY_DATABASE_URI> -p 5000:5000 --name myapp predictor_app app.py
+export SQLALCHEMY_DATABASE_URI=<YOUR_SQLALCHEMY_DATABASE_URI>
+docker run --mount type=bind,source="$(pwd)",target=/app/ -e SQLALCHEMY_DATABASE_URI -p 5000:5000 --name myapp predictor_app app.py
 ```
 
 By default, the webapp will be running on a local host at `http://0.0.0.0:5000/` in your browser. You can press `CTRL+C` at any time to quit.
