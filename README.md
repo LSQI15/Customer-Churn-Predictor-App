@@ -1,10 +1,16 @@
-# MSiA423 Customer Churn Prediction - Project Repository
+# Customer Churn Predictor App - Project Repository
+
 
 <!-- toc -->
+#### Northwestern University 
 
-### Developer: Siqi Li
+#### MSiA-423 Analytics Value Chain
 
-### QA: Luping(Rachel) Zhao
+#### Spring 2020
+
+#### Developer: Siqi Li
+
+#### QA: Luping(Rachel) Zhao
 
 
 <!-- toc -->
