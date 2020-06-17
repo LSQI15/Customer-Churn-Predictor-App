@@ -121,10 +121,10 @@ In order to run the app, you first need to clone the repo to your local machine 
 
 ```shell script
 # clone the repo 
-git clone git@github.com:LSQI15/MSiA423-Customer-Churn-Predictor.git
+git clone git@github.com:LSQI15/Customer-Churn-Predictor-App.git
 
 # update working directory
-cd MSiA423-Customer-Churn-Predictor
+cd Customer-Churn-Predictor-App
 ```
 
 ## Random Forest Model Pipeline
