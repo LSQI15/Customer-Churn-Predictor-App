@@ -2,18 +2,6 @@
 
 
 <!-- toc -->
-#### Northwestern University 
-
-#### MSiA-423 Analytics Value Chain
-
-#### Spring 2020
-
-#### Developer: Siqi Li
-
-#### QA: Luping(Rachel) Zhao
-
-
-<!-- toc -->
 
 ## Repo structure
 
